@@ -1,0 +1,10 @@
+{
+    "folders":
+    [
+        {
+            "name": "Intel·ligència Artificial",
+            "path": ".",
+            "file_exclude_patterns": ["*.sublime-*", "*.pdf"]
+        }
+    ]
+}

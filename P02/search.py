@@ -113,35 +113,27 @@ def genericSolver(problem, dataStrategy, isPriorityQueue = False):
     For easier implementation, it is necessary to state if a Priority Queue is passed as
     data strategy.
     """
-    marked = {}
+    marked = []
     edgeTo = {}
+    frontier = dataStrategy
 
-    def iterateOver(state):
+    def expand(state):
         """
-        This algorith performs a DFS over the world, and annotates every connection
-        between each node that PM can advance on.
-
-        Returns the node where the food is located.
+        Expands from the state passed by and returns the goal state, thus solving the problem.
         """
-        # A Queue offers better results than a Stack.
-        #   Queue Cost: 68
-        #   Stack Cost: 130
-        frontier = dataStrategy
         cost = 1
-        while not problem.isGoalState(state):
-            marked[str(state)] = True
-            for successor in problem.getSuccessors(state):
-                if not str(successor[0]) in marked:
-                    edgeTo[str(successor[0])] = [state, successor[1]]
-                    if isPriorityQueue:
-                        frontier.push(successor[0], cost)
-                    else:
-                        frontier.push(successor[0])
-            # print node
-            # print frontier
-            cost += 1
+        frontier.push(state)
+        while not frontier.isEmpty():
             state = frontier.pop()
-        return state
+            marked.append(state)
+            for successor in problem.getSuccessors(state):
+                newState, action = successor[0], successor[1]
+                if ( not newState in marked ) and ( not newState in frontier.list ):
+                    edgeTo[newState] = [state, action]
+                    frontier.push(newState)
+            if problem.isGoalState(state):
+                return state
+        raise Exception('No solution available')
 
     def pathTo(state):
         """
@@ -151,17 +143,23 @@ def genericSolver(problem, dataStrategy, isPriorityQueue = False):
         n = state
         s = problem.getStartState()
         while n != s:
-            # print n
-            path.push(edgeTo[str(n)][1])
-            n = edgeTo[str(n)][0]
+            # print n, edgeTo[n][1]
+            path.push(edgeTo[n][1])
+            n = edgeTo[n][0]
         return path
 
-    goal = iterateOver(problem.getStartState())
-    path = util.Queue()
-    # path = pathTo(goal)
+    goal = expand(problem.getStartState())
+    # path = util.Queue()
+    # print edgeTo, len(edgeTo)
+    # print
+    # print frontier
+    
+    path = pathTo(goal)
 
-    print edgeTo
-    print path
+    # print problem.getStartState()
+    # print goal
+    # print path
+    # print pathTo(goal)
 
     return path.list
 
@@ -192,8 +190,55 @@ def nullHeuristic(state, problem=None):
 
 def aStarSearch(problem, heuristic=nullHeuristic):
     "Search the node that has the lowest combined cost and heuristic first."
-    "*** YOUR CODE HERE ***"
-    util.raiseNotDefined()
+    marked = []
+    edgeTo = {}
+    frontier = util.PriorityQueue()
+    gCost = {}
+    fCost = {}
+
+    def expand(state):
+        gCost[state] = 0
+        fCost[state] = heuristic(state, problem)
+        frontier.push(state, fCost[state])
+
+        while (not frontier.isEmpty()):
+            state = frontier.pop()
+            # marked.append(state)
+            for successor in problem.getSuccessors(state):
+                newState, action, cost = successor[0], successor[1], successor[2]
+                # print newState, action, cost
+                if (newState not in marked and newState not in frontier.heap):
+                # if newState not in marked:
+                    gCost[newState] = gCost[state] + cost
+                    fCost[newState] = gCost[newState] + heuristic(newState, problem) 
+                    edgeTo[newState] = [state, action]
+                    marked.append(newState)
+                    frontier.push(newState, fCost[newState]) # fCost[newState]
+        
+            # print len(frontier.heap)
+
+            if (problem.isGoalState(state)):
+                return state
+
+        raise Exception("PETA")
+
+    def pathTo(state):
+        """
+        Returns an array of Directions values indicating the path to the state.
+        """
+        path = util.Queue()
+        n = state
+        s = problem.getStartState()
+        while n != s:
+            # print n, edgeTo[n][1]
+            path.push(edgeTo[n][1])
+            n = edgeTo[n][0]
+        return path
+
+    goal = expand(problem.getStartState())
+    path = pathTo(goal)
+    # print path.list
+    return path.list
 
 
 # Abbreviations

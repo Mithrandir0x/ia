@@ -32,7 +32,9 @@ class ReflexAgent(Agent):
     scores = [self.evaluationFunction(gameState, action) for action in legalMoves]
     bestScore = max(scores)
     bestIndices = [index for index in range(len(scores)) if scores[index] == bestScore]
-    chosenIndex = random.choice(bestIndices) # Pick randomly among the best
+
+    # Pick randomly among the best
+    chosenIndex = random.choice(bestIndices)
     
     "Add more of your code here if you want to"
     
@@ -55,6 +57,7 @@ class ReflexAgent(Agent):
     """
     if successorGameState.isWin():  return float("inf")
     if successorGameState.isLose(): return float("-inf")
+    
     # Useful information you can extract from a GameState (pacman.py)
     successorGameState = currentGameState.generatePacmanSuccessor(action)
     newPos = successorGameState.getPacmanPosition()
@@ -148,7 +151,6 @@ class MinimaxAgent(MultiAgentSearchAgent):
       if depth >= maxDepth or state.isWin() or state.isLose():
         # Terminal condition to leave
         utility = evaluate(state)
-        # print "%15s: %s" % ( "u(P, %s)" % depth, utility )
         return utility
       
       # The worst thing a Pacman can do is to be idle without doing anything.
@@ -157,15 +159,12 @@ class MinimaxAgent(MultiAgentSearchAgent):
       depth += 1
       # We filter the stop action as it is already defined as the possible initial state
       actions = [ action for action in state.getLegalActions() if action != Directions.STOP ]
-      # print "%15s: %s" % ("P", actions)
       for action in actions:
         # For each of the action the Pacman can perform, generate a new state
         # with such action executed, and imagine how the ghosts would behave
         # and minimize pacman's utility value
-        # print "%15s: %s" % ( "-->MIN",  action )
         utility = minValue(state.generateSuccessor(0, action), depth)
         u = max(u, utility)
-      # print "%15s: %s" % ( "MAX(P, %d)" % depth, u )
       return u
 
     def minValue(state, depth, ghost_id = None):
@@ -174,8 +173,7 @@ class MinimaxAgent(MultiAgentSearchAgent):
       """
       if depth >= maxDepth or state.isWin() or state.isLose():
         # Terminal condition to leave
-        utility = evaluate(state)
-        # print "%15s: %s" % ( "u(P, %s)" % depth, utility )
+        utility = evaluate(state))
         return utility
       
       if ghost_id == None:
@@ -190,38 +188,22 @@ class MinimaxAgent(MultiAgentSearchAgent):
       
       # For each ghost, iterate over each of its actions
       # to calculate the utility of the new generated state
-      # print "%15s: %s" % ( "G%d" % ghost_id, state.getLegalActions(ghost_id) )
       for action in state.getLegalActions(ghost_id):
         # Always find the minimal utility value of the Pacman.
         # We don't want that pesky guy to win over our ghosts.
         if ghost_id == maxGhosts:
-          # print "%15s: %s" % ( "-->MAX(%s)" % ghost_id , action )
           utility = maxValue(state.generateSuccessor(ghost_id, action), depth)
-          # print "%15s: %s" % ( "<--MAX(%s)" % ghost_id , utility )
         else:
-          # print "%15s: %s" % ( "-->MIN(%s)" % ghost_id , action )
           utility = minValue(state.generateSuccessor(ghost_id, action), depth, next_ghost_id)
-          # print "%15s: %s" % ( "<--MIN(%s)" % ghost_id , utility )
-        # print "%15s: %s" % ( "BEFORE U(G%s, %s)" % ( ghost_id, depth ), u )
         u = min(u, utility)
-        # print "%15s: %s" % ( "AFTER U(G%s, %s)" % ( ghost_id, depth ), u )
-      # print "%15s: %s" % ( "MIN(G%s, %s)" % ( ghost_id, depth ), u )
       return u
 
     actions = [ action for action in gameState.getLegalActions() if action != Directions.STOP ]
     actions_utilities = []
-    # print "%15s: %s" % ("P", actions)
     for action in actions:
-      # print "%15s: %s" % ( "-->MIN",  action )
       actions_utilities.append((minValue(gameState.generateSuccessor(0, action), 1), action))
-      # print ""
     
     best_action = max(actions_utilities)
-
-    #print "LEGAL ACTIONS"
-    #for a in actions_utilities:
-    #  print "\t\t", a
-    #print "BEST ONE:", best_action, "\n"
     
     return best_action[1]
 
@@ -243,33 +225,25 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
     def maxValue(state, alpha, beta, depth):
       if depth >= maxDepth or state.isWin() or state.isLose():
         utility = evaluate(state)
-        # print "%15s: %s" % ( "u(P, %s)" % depth, utility )
         return utility
       
       u = float('-inf')
       
       depth += 1
       actions = [ action for action in state.getLegalActions() if action != Directions.STOP ]
-      # print "%15s: %s" % ("P", actions)
       for action in actions:
-        # print "%15s: %s" % ( "-->MIN",  action )
         utility = minValue(state.generateSuccessor(0, action), alpha, beta, depth)
         u = max(u, utility)
         
         if u >= beta: 
-          # print "Downcut beta" 
           return u
         alpha = max(alpha, u)
-        # print "Alpha =", alpha
-
-      # print "%15s: %s" % ( "MAX(P, %d)" % depth, u )
+      
       return u
 
     def minValue(state, alpha, beta, depth, ghost_id = None):
       if depth >= maxDepth or state.isWin() or state.isLose():
-        # Terminal condition to leave
         utility = evaluate(state)
-        #print "%15s: %s" % ( "u(P, %s)" % depth, utility )
         return utility
       
       if ghost_id == None:
@@ -278,45 +252,27 @@ class AlphaBetaAgent(MultiAgentSearchAgent):
       
       u = float('inf')
       
-      # print "%15s: %s" % ( "G%d" % ghost_id, state.getLegalActions(ghost_id) )
       for action in state.getLegalActions(ghost_id):
         if ghost_id == maxGhosts:
-          # print "%15s: %s" % ( "-->MAX(%s)" % ghost_id , action )
           utility = maxValue(state.generateSuccessor(ghost_id, action), alpha, beta, depth)
-          # print "%15s: %s" % ( "<--MAX(%s)" % ghost_id , utility )
         else:
-          # print "%15s: %s" % ( "-->MIN(%s)" % ghost_id , action )
           utility = minValue(state.generateSuccessor(ghost_id, action), alpha, beta, depth, next_ghost_id)
-          # print "%15s: %s" % ( "<--MIN(%s)" % ghost_id , utility )
-        # print "%15s: %s" % ( "BEFORE U(G%s, %s)" % ( ghost_id, depth ), u )
         u = min(u, utility)
         
         if u <= alpha:
-          # print "Uppercut alpha" 
           return u
         beta = min(beta, u)
-        # print "Beta =", beta
 
-        # print "%15s: %s" % ( "AFTER U(G%s, %s)" % ( ghost_id, depth ), u )
-      # print "%15s: %s" % ( "MIN(G%s, %s)" % ( ghost_id, depth ), u )
       return u
 
     actions = [ action for action in gameState.getLegalActions() if action != Directions.STOP ]
     actions_utilities = []
     alpha = float('-inf')
     beta = float('inf')
-    # print "%15s: %s" % ("P", actions)
     for action in actions:
-      # print "%15s: %s" % ( "-->MIN",  action )
       actions_utilities.append((minValue(gameState.generateSuccessor(0, action), alpha, beta, 1), action))
-      # print ""
     
     best_action = max(actions_utilities)
-
-    #print "LEGAL ACTIONS"
-    #for a in actions_utilities:
-    #  print "\t\t", a
-    #print "BEST ONE:", best_action, "\n"
 
     return best_action[1]
 
@@ -345,8 +301,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       having information of the state when calculating the
       probabilities of an action would be useful to know what
       would do a ghost.
-
-      WWGD
       """
       p = {}
       for action in legal_actions:
@@ -359,9 +313,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       except for calling expValue, instead of minValue.
       """
       if depth >= maxDepth or state.isWin() or state.isLose():
-        # Terminal condition to leave
         utility = evaluate(state)
-        # print "%15s: %s" % ( "u(P, %s)" % depth, utility )
         return utility
       
       u = float('-inf')
@@ -381,9 +333,7 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       minimize the Pacman's utility.
       """
       if depth >= maxDepth or state.isWin() or state.isLose():
-        # Terminal condition to leave
         utility = evaluate(state)
-        # print "%15s: %s" % ( "u(P, %s)" % depth, utility )
         return utility
       
       if ghost_id == None:
@@ -413,11 +363,6 @@ class ExpectimaxAgent(MultiAgentSearchAgent):
       
     best_action = max(actions_utilities)
 
-    #print "LEGAL ACTIONS"
-    #for a in actions_utilities:
-    #  print "\t\t", a
-    #print "BEST ONE:", best_action, "\n"
-
     return best_action[1]
 
 def betterEvaluationFunction(currentGameState):
@@ -426,6 +371,12 @@ def betterEvaluationFunction(currentGameState):
     evaluation function.
     
     DESCRIPTION: YARRRRR-READ AHOY
+
+    DISCLAIMER:
+    I lost the original source of this code, so this part is not mine at all. Though anyone
+    reading this will frown at me, I have to tell you: Hey, I had an assingment to deliver.
+
+    If by any chance, you're the one that did this part of the code, I owe you a beer.
   """
   if currentGameState.isWin():  return float("inf")
   if currentGameState.isLose(): return float("-inf")
@@ -437,10 +388,13 @@ def betterEvaluationFunction(currentGameState):
   capsules = currentGameState.getCapsules()
 
   def manhattan(xy1, xy2):
-    "Our lil' and old Manhattan taxi drive distance function"
+    """
+    Our lil' and old Manhattan taxi drive distance function
+    """
     return abs(xy1[0] - xy2[0]) + abs(xy1[1] - xy2[1])
 
   manhattans_food = [ ( manhattan(pacmanPos, food) ) for food in foodPos.asList() ]
+  
   # For each of the manhattan distances to a food, we take the one
   # with the minimal distance possible
   min_manhattans_food = min(manhattans_food)
@@ -459,18 +413,24 @@ def betterEvaluationFunction(currentGameState):
   if ( len(manhattans_ghost_scared) > 0 ): 
     min_manhattans_ghost_scared = min(manhattans_ghost_scared)
 
+  # Get the default score for the current state.
   score = scoreEvaluationFunction(currentGameState)
+  
   # The main objective of the pacman: THE PELLET. It has to be its utmost priority.
   score += -1.5 * min_manhattans_food
+  
   # Why the inverse of the lowest distance possible? Pretty obvious, we want to
   # give the less points possible when a ghost is getting near the Pacman.
   score += -2 * ( 1.0 / min_manhattans_ghost )
+  
   # So for scared ghosts, we give them the same weight as the normal ghosts,
   # though when we can eat them, they will be a pretty and tasty meal.
   score += -2 * min_manhattans_ghost_scared
+  
   # Why this massive weight compared to other factors? We want the Pacman to be
   # focused on eating pellets, not capsules and then go for ghosts.
   score += -20 * len(capsules)
+  
   # For each non eaten pellet, diminish current state score. It is important to
   # make the Pacman be enticed to go for pellets.
   score += -4 * len(foodPos.asList())

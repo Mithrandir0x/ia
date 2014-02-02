@@ -1,19 +1,16 @@
-# search.py
-# ---------
-# Licensing Information:  You are free to use or extend these projects for 
-# educational purposes provided that (1) you do not distribute or publish 
-# solutions, (2) you retain this notice, and (3) you provide clear 
-# attribution to UC Berkeley, including a link to 
-# http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html
-# 
-# Attribution Information: The Pacman AI projects were developed at UC Berkeley.
-# The core projects and autograders were primarily created by John DeNero 
-# (denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
-# Student side autograding was added by Brad Miller, Nick Hay, and 
-# Pieter Abbeel (pabbeel@cs.berkeley.edu).
-
-
 """
+Licensing Information:  You are free to use or extend these projects for 
+educational purposes provided that (1) you do not distribute or publish 
+solutions, (2) you retain this notice, and (3) you provide clear 
+attribution to UC Berkeley, including a link to 
+[http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html](http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html)
+
+Attribution Information: The Pacman AI projects were developed at UC Berkeley.
+The core projects and autograders were primarily created by John DeNero 
+(denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+Student side autograding was added by Brad Miller, Nick Hay, and 
+Pieter Abbeel (pabbeel@cs.berkeley.edu).
+
 In search.py, you will implement generic search algorithms which are called
 by Pacman agents (in searchAgents.py).
 """
@@ -36,7 +33,7 @@ class SearchProblem:
 
     def isGoalState(self, state):
         """
-          state: Search state
+        `state`: Search state
 
         Returns True if and only if the state is a valid goal state
         """
@@ -56,13 +53,12 @@ class SearchProblem:
 
     def getCostOfActions(self, actions):
         """
-         actions: A list of actions to take
+        `actions`: A list of actions to take
 
         This method returns the total cost of a particular sequence of actions.  The sequence must
         be composed of legal moves
         """
         util.raiseNotDefined()
-
 
 def tinyMazeSearch(problem):
     """
@@ -143,23 +139,12 @@ def genericSolver(problem, dataStrategy, isPriorityQueue = False):
         n = state
         s = problem.getStartState()
         while n != s:
-            # print n, edgeTo[n][1]
             path.push(edgeTo[n][1])
             n = edgeTo[n][0]
         return path
 
     goal = expand(problem.getStartState())
-    # path = util.Queue()
-    # print edgeTo, len(edgeTo)
-    # print
-    # print frontier
-    
     path = pathTo(goal)
-
-    # print problem.getStartState()
-    # print goal
-    # print path
-    # print pathTo(goal)
 
     return path.list
 
@@ -189,7 +174,9 @@ def nullHeuristic(state, problem=None):
     return 0
 
 def aStarSearch(problem, heuristic=nullHeuristic):
-    "Search the node that has the lowest combined cost and heuristic first."
+    """
+    Search the node that has the lowest combined cost and heuristic first.
+    """
     marked = []
     edgeTo = {}
     frontier = util.PriorityQueue()
@@ -203,19 +190,14 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
         while (not frontier.isEmpty()):
             state = frontier.pop()
-            # marked.append(state)
             for successor in problem.getSuccessors(state):
                 newState, action, cost = successor[0], successor[1], successor[2]
-                # print newState, action, cost
                 if (newState not in marked and newState not in frontier.heap):
-                # if newState not in marked:
                     gCost[newState] = gCost[state] + cost
                     fCost[newState] = gCost[newState] + heuristic(newState, problem) 
                     edgeTo[newState] = [state, action]
                     marked.append(newState)
-                    frontier.push(newState, fCost[newState]) # fCost[newState]
-        
-            # print len(frontier.heap)
+                    frontier.push(newState, fCost[newState])
 
             if (problem.isGoalState(state)):
                 return state
@@ -230,16 +212,13 @@ def aStarSearch(problem, heuristic=nullHeuristic):
         n = state
         s = problem.getStartState()
         while n != s:
-            # print n, edgeTo[n][1]
             path.push(edgeTo[n][1])
             n = edgeTo[n][0]
         return path
 
     goal = expand(problem.getStartState())
     path = pathTo(goal)
-    # print path.list
     return path.list
-
 
 # Abbreviations
 bfs = breadthFirstSearch

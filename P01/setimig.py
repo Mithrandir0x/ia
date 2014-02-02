@@ -87,13 +87,7 @@ class Game():
                 else:
                     # Otherwise, we try to find if we have any card
                     # greater than 7.
-                    def isAbove7(n):
-                        """
-                        Filter method that indicates if a number is greater
-                        than 7.
-                        """
-                        return n > 7
-                    cards = filter(isAbove7, self.deck)
+                    cards = filter(lambda n: n > 7, self.deck)
                     if len(cards) == 0:
                         # If there's no card with value greater than 7,
                         # end the game.
@@ -126,13 +120,13 @@ class Game():
         """
         if len(deck) == 0:
             return '()'
-        s = ''
+        s = '('
         for card in deck:
             if card <= 7: s += '[%d], ' % card
             elif card == 8: s += '[S], '
             elif card == 9: s += '[C], '
             elif card == 10: s += '[R], '
-        return s[:-2] + ''
+        return s[:-2] + ')'
     def getPlayerOption(self):
         """
         Asks the player which option to choose.

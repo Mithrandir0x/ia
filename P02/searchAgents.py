@@ -279,9 +279,7 @@ class CornersProblem(search.SearchProblem):
         self.startingPosition = ( x, y, (False, False, False, False) )
         top, right = self.walls.height-2, self.walls.width-2
         
-        #self.corners = [(right, 1), (1,1), (1,top), (right, top)]
         self.corners = [(1,1), (1,top), (right, 1), (right, top)]
-        
         #self.corners = {}
         #for corner in [(1,1), (1,top), (right, 1), (right, top)]:
         #    self.corners[corner] = False
@@ -303,16 +301,8 @@ class CornersProblem(search.SearchProblem):
         if (x, y) in self.corners:
             corners = list(corners)
             corners[self.corners.index((x,y))] = True
-            corners = tuple(corners)
-            
-            #i = self.corners.index((x,y))
-            #if i == 0:
-            #    corners[i] = True
-            #else:
-            #    if corners[0] == True:
-            #        corners[i] = True
-
             # del self.corners[self.corners.index((x, y))]
+            corners = tuple(corners)
             #  n += 1
 
         # isGoal = ( (x, y) in self.corners ) and ( n == 4 )
@@ -338,18 +328,8 @@ class CornersProblem(search.SearchProblem):
         if (x, y) in self.corners:
             corners = list(corners)
             corners[self.corners.index((x,y))] = True
-            corners = tuple(corners)
-            
-            #i = self.corners.index((x,y))
-            #corners[i] = True
-
-            #if i == 0:
-             #   corners[i] = True
-            #else:
-             #   if corners[0] == True:
-              #      corners[i] = True
-
             # del self.corners[self.corners.index((x, y))]
+            corners = tuple(corners)
             # n += 1
 
         for action in [Directions.NORTH, Directions.SOUTH, Directions.EAST, Directions.WEST]:

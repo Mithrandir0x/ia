@@ -128,7 +128,7 @@ def genericSolver(problem, dataStrategy, isPriorityQueue = False):
             marked.append(state)
             for successor in problem.getSuccessors(state):
                 newState, action = successor[0], successor[1]
-                if newState not in marked and newState not in frontier:
+                if ( not newState in marked ) and ( not newState in frontier.list ):
                     edgeTo[newState] = [state, action]
                     frontier.push(newState)
             if problem.isGoalState(state):
@@ -143,7 +143,7 @@ def genericSolver(problem, dataStrategy, isPriorityQueue = False):
         n = state
         s = problem.getStartState()
         while n != s:
-            print n, edgeTo[n][1]
+            # print n, edgeTo[n][1]
             path.push(edgeTo[n][1])
             n = edgeTo[n][0]
         return path
@@ -160,7 +160,7 @@ def genericSolver(problem, dataStrategy, isPriorityQueue = False):
     # print goal
     # print path
     # print pathTo(goal)
-    print "Longitud:", len(path.list)
+
     return path.list
 
 
@@ -237,7 +237,6 @@ def aStarSearch(problem, heuristic=nullHeuristic):
 
     goal = expand(problem.getStartState())
     path = pathTo(goal)
-    print "Longitud:", len(path.list)
     # print path.list
     return path.list
 

@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>spock.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id="background"></div>
+<div id='container'>
+  <div class='section'>
+    <div class='docs'><h1>spock.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>A class emulating an enumeration of possible results of the game.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Result</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">WIN</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">LOSE</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">DRAW</span> <span class="o">=</span> <span class="mi">2</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Base class of RPSSL component. It does have the logic to play against other weapons.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Weapon</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strongAgainst</span> <span class="o">=</span> <span class="p">{}</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Defines that the weapon class passed by is weaker than self, and verbs it. Err I mean
+it indicate what self does to the weapon class passed by.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">strong</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weaponClass</span><span class="p">,</span> <span class="n">verb</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">strongAgainst</span><span class="p">[</span><span class="n">weaponClass</span><span class="p">]</span> <span class="o">=</span> <span class="n">verb</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Simulate a battle between a weapon and self. It returns a tuple of:
+ - Result Static value
+ - Action of the battle</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">battle</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">weapon</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span> <span class="o">==</span> <span class="n">weapon</span><span class="o">.</span><span class="n">__class__</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span> <span class="n">Result</span><span class="o">.</span><span class="n">DRAW</span><span class="p">,</span> <span class="bp">None</span> <span class="p">)</span>
+        <span class="k">if</span> <span class="n">weapon</span><span class="o">.</span><span class="n">__class__</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">strongAgainst</span><span class="p">:</span>
+            <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">strongAgainst</span><span class="p">[</span><span class="n">weapon</span><span class="o">.</span><span class="n">__class__</span><span class="p">],</span> <span class="n">weapon</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="p">)</span>
+            <span class="k">return</span> <span class="p">(</span> <span class="n">Result</span><span class="o">.</span><span class="n">WIN</span><span class="p">,</span> <span class="n">action</span> <span class="p">)</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">weapon</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span><span class="p">,</span> <span class="n">weapon</span><span class="o">.</span><span class="n">strongAgainst</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="p">],</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="p">(</span> <span class="n">Result</span><span class="o">.</span><span class="n">LOSE</span><span class="p">,</span> <span class="n">action</span> <span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Returns the string representation of self.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">__class__</span><span class="o">.</span><span class="n">__name__</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>The Rock. Strong against the Scissors and the Lizzard.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Rock</span><span class="p">(</span><span class="n">Weapon</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Weapon</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Scissors</span><span class="p">,</span> <span class="s">&#39;crushes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Lizzard</span><span class="p">,</span> <span class="s">&#39;crushes&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>Paper. You use it on any thesis, and can disprove Spock. Also kills Rock, WITHOUT FIRE!!</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Paper</span><span class="p">(</span><span class="n">Weapon</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Weapon</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Rock</span><span class="p">,</span> <span class="s">&#39;covers&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Spock</span><span class="p">,</span> <span class="s">&#39;disprove&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>The sharp Scissors can cut through Paper and Lizzards.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Scissors</span><span class="p">(</span><span class="n">Weapon</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Weapon</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Paper</span><span class="p">,</span> <span class="s">&#39;cuts&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Lizzard</span><span class="p">,</span> <span class="s">&#39;decapitates&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>Live long and prosper. Smashes and Vaporizes. 'nuf said.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Spock</span><span class="p">(</span><span class="n">Weapon</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Weapon</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Scissors</span><span class="p">,</span> <span class="s">&#39;smashes&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Rock</span><span class="p">,</span> <span class="s">&#39;vaporizes&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <p>Weeeeeeeeee. It poisons Spock, and eats Paper for breakfast.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Lizzard</span><span class="p">(</span><span class="n">Weapon</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">Weapon</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Spock</span><span class="p">,</span> <span class="s">&#39;poisons&#39;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">strong</span><span class="p">(</span><span class="n">Paper</span><span class="p">,</span> <span class="s">&#39;eats&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>The game main logic class.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Game</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">weapons</span> <span class="o">=</span> <span class="p">[</span><span class="n">Rock</span><span class="p">(),</span> <span class="n">Paper</span><span class="p">(),</span> <span class="n">Scissors</span><span class="p">(),</span> <span class="n">Spock</span><span class="p">(),</span> <span class="n">Lizzard</span><span class="p">()]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playerScore</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaOption</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaScore</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <p>Utility method to state business and options.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">showPresentation</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">print</span> <span class="s">&quot;Rock, Paper, Scissors, Spock, Lizzard&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  1. Rock&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  2. Paper&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  3. Scissors&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  4. Spock&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  5. Lizzard&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  6. END THE GAME (AND YOU JUST LOST)&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <p>It shows how severely pwned you've been.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">showScore</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  Player  |    Ada&quot;</span>
+        <span class="k">print</span> <span class="s">&quot; -------------------&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;   </span><span class="si">%3d</span><span class="s">    |   </span><span class="si">%3d</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">playerScore</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">adaScore</span> <span class="p">)</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>Sets the player's option after being inputted at the standard input.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getPlayerOption</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">&quot;Choose: &quot;</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">SyntaxError</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">=</span> <span class="bp">None</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>Sets the AI option.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAdaOption</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">adaOption</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      <p>Game core method. </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">showPresentation</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">getPlayerOption</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">!=</span> <span class="mi">6</span><span class="p">:</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">&gt;=</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">&lt;=</span> <span class="mi">6</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">getAdaOption</span><span class="p">()</span>
+                <span class="k">print</span> <span class="s">&quot;YOU:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weapons</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span>
+                <span class="k">print</span> <span class="s">&quot;ADA:&quot;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">weapons</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">adaOption</span><span class="p">]</span>
+                <span class="n">result</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">weapons</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">-</span> <span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">battle</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">weapons</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">adaOption</span><span class="p">])</span>
+                <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">Result</span><span class="o">.</span><span class="n">DRAW</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;DRAW!&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="n">result</span> <span class="o">==</span> <span class="n">Result</span><span class="o">.</span><span class="n">WIN</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">playerScore</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">, YOU WIN!&quot;</span> <span class="o">%</span> <span class="n">action</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">adaScore</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="k">print</span> <span class="s">&quot;</span><span class="si">%s</span><span class="s">, YOU LOSE&quot;</span> <span class="o">%</span> <span class="n">action</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">getPlayerOption</span><span class="p">()</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">showScore</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;What about a nice game of chess?&quot;</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">Game</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

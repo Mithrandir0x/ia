@@ -1,0 +1,1414 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>searchAgents.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id="background"></div>
+<div id='container'>
+  <div class='section'>
+    <div class='docs'><h1>searchAgents.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      <p>Licensing Information:  You are free to use or extend these projects for 
+educational purposes provided that (1) you do not distribute or publish 
+solutions, (2) you retain this notice, and (3) you provide clear 
+attribution to UC Berkeley, including a link to 
+<a href="http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html">http://inst.eecs.berkeley.edu/~cs188/pacman/pacman.html</a></p>
+<p>Attribution Information: The Pacman AI projects were developed at UC Berkeley.
+The core projects and autograders were primarily created by John DeNero 
+(denero@cs.berkeley.edu) and Dan Klein (klein@cs.berkeley.edu).
+Student side autograding was added by Brad Miller, Nick Hay, and 
+Pieter Abbeel (pabbeel@cs.berkeley.edu).</p>
+<p>This file contains all of the agents that can be selected to
+control Pacman.  To select an agent, use the <code>-p</code> option
+when running pacman.py.  Arguments can be passed to your agent
+using <code>-a</code>.  For example, to load a SearchAgent that uses
+depth first search (dfs), run the following command:</p>
+<p><code>&gt; python pacman.py -p SearchAgent -a fn=depthFirstSearch</code></p>
+<p>Commands to invoke other search strategies can be found in the
+project description.</p>
+<p>Good luck and happy searching!</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="n">Directions</span>
+<span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="n">Agent</span>
+<span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="n">Actions</span>
+<span class="kn">import</span> <span class="nn">util</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="kn">import</span> <span class="nn">search</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>An agent that goes West until it can't.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">GoWestAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>The agent receives a GameState (defined in pacman.py).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">Directions</span><span class="o">.</span><span class="n">WEST</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalPacmanActions</span><span class="p">():</span>
+            <span class="k">return</span> <span class="n">Directions</span><span class="o">.</span><span class="n">WEST</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>This very general search agent finds a path using a supplied search algorithm for a
+supplied search problem, then returns actions to follow that path.</p>
+<p>As a default, this agent runs DFS on a PositionSearchProblem to find location (1,1)</p>
+<p>Options for fn include:
+  depthFirstSearch or dfs
+  breadthFirstSearch or bfs</p>
+<p>Note: You should NOT change any code in SearchAgent</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">SearchAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">fn</span><span class="o">=</span><span class="s">&#39;depthFirstSearch&#39;</span><span class="p">,</span> <span class="n">prob</span><span class="o">=</span><span class="s">&#39;PositionSearchProblem&#39;</span><span class="p">,</span> <span class="n">heuristic</span><span class="o">=</span><span class="s">&#39;nullHeuristic&#39;</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p>Warning: some advanced Python magic is employed below to find the right functions and problems</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Get the search function from the name and heuristic</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">fn</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">search</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="n">fn</span> <span class="o">+</span> <span class="s">&#39; is not a search function in search.py.&#39;</span>
+        <span class="n">func</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">fn</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s">&#39;heuristic&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">func</span><span class="o">.</span><span class="n">func_code</span><span class="o">.</span><span class="n">co_varnames</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;[SearchAgent] using function &#39;</span> <span class="o">+</span> <span class="n">fn</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">=</span> <span class="n">func</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">heuristic</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+                <span class="n">heur</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">heuristic</span><span class="p">]</span>
+            <span class="k">elif</span> <span class="n">heuristic</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">search</span><span class="p">):</span>
+                <span class="n">heur</span> <span class="o">=</span> <span class="nb">getattr</span><span class="p">(</span><span class="n">search</span><span class="p">,</span> <span class="n">heuristic</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="n">heuristic</span> <span class="o">+</span> <span class="s">&#39; is not a function in searchAgents.py or search.py.&#39;</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&#39;[SearchAgent] using function </span><span class="si">%s</span><span class="s"> and heuristic </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">fn</span><span class="p">,</span> <span class="n">heuristic</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>Note: this bit of Python trickery combines the search algorithm and the heuristic</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">func</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">heuristic</span><span class="o">=</span><span class="n">heur</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>Get the search problem type from the name</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">prob</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">globals</span><span class="p">()</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">prob</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s">&#39;Problem&#39;</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">AttributeError</span><span class="p">,</span> <span class="n">prob</span> <span class="o">+</span> <span class="s">&#39; is not a search problem type in SearchAgents.py.&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchType</span> <span class="o">=</span> <span class="nb">globals</span><span class="p">()[</span><span class="n">prob</span><span class="p">]</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;[SearchAgent] using problem type &#39;</span> <span class="o">+</span> <span class="n">prob</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>This is the first time that the agent sees the layout of the game board. Here, we
+choose a path to the goal.  In this phase, the agent should compute the path to the
+goal and store it in a local variable.  All of the work is done in this method!</p>
+<p><code>state</code>: a GameState object <code>(pacman.py)</code></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">registerInitialState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">raise</span> <span class="ne">Exception</span><span class="p">,</span> <span class="s">&quot;No search function provided for SearchAgent&quot;</span>
+        <span class="n">starttime</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchType</span><span class="p">(</span><span class="n">state</span><span class="p">)</span> <span class="c"># Makes a new search problem</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span>  <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span><span class="p">(</span><span class="n">problem</span><span class="p">)</span> <span class="c"># Find a path</span>
+        <span class="n">totalCost</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">getCostOfActions</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&#39;Path found with total cost of </span><span class="si">%d</span><span class="s"> in </span><span class="si">%.1f</span><span class="s"> seconds&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="n">totalCost</span><span class="p">,</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">-</span> <span class="n">starttime</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s">&#39;_expanded&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">problem</span><span class="p">):</span> <span class="k">print</span><span class="p">(</span><span class="s">&#39;Search nodes expanded: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">problem</span><span class="o">.</span><span class="n">_expanded</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>Returns the next action in the path chosen earlier (in registerInitialState).  Return
+Directions.STOP if there is no further action to take.</p>
+<p><code>state</code>: a GameState object <code>(pacman.py)</code></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="s">&#39;actionIndex&#39;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionIndex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">i</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">actionIndex</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionIndex</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>A search problem defines the state space, start state, goal test,
+successor function and cost function.  This search problem can be
+used to find paths to a particular point on the pacman board.</p>
+<p>The state space consists of (x,y) positions in a pacman game.</p>
+<p>Note: this search problem is fully specified; you should NOT change it.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">PositionSearchProblem</span><span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">SearchProblem</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <p>Stores the start and goal.</p>
+<p>gameState: A GameState object (pacman.py)
+costFn: A function from a search state (tuple) to a non-negative number
+goal: A position in the gameState</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">,</span> <span class="n">costFn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span> <span class="n">goal</span><span class="o">=</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">start</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="bp">True</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getWalls</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startState</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">()</span>
+        <span class="k">if</span> <span class="n">start</span> <span class="o">!=</span> <span class="bp">None</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">startState</span> <span class="o">=</span> <span class="n">start</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">goal</span> <span class="o">=</span> <span class="n">goal</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">costFn</span> <span class="o">=</span> <span class="n">costFn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">visualize</span> <span class="o">=</span> <span class="n">visualize</span>
+        <span class="k">if</span> <span class="n">warn</span> <span class="ow">and</span> <span class="p">(</span><span class="n">gameState</span><span class="o">.</span><span class="n">getNumFood</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">1</span> <span class="ow">or</span> <span class="ow">not</span> <span class="n">gameState</span><span class="o">.</span><span class="n">hasFood</span><span class="p">(</span><span class="o">*</span><span class="n">goal</span><span class="p">)):</span>
+            <span class="k">print</span> <span class="s">&#39;Warning: this does not look like a regular search maze&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      <p>For display purposes</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">_visited</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visitedlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">[],</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getStartState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">startState</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">isGoalState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="n">isGoal</span> <span class="o">=</span> <span class="n">state</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">goal</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <p>For display purposes only</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">isGoal</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">visualize</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visitedlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+            <span class="kn">import</span> <span class="nn">__main__</span>
+            <span class="k">if</span> <span class="s">&#39;_display&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">__main__</span><span class="p">):</span>
+                <span class="k">if</span> <span class="s">&#39;drawExpandedCells&#39;</span> <span class="ow">in</span> <span class="nb">dir</span><span class="p">(</span><span class="n">__main__</span><span class="o">.</span><span class="n">_display</span><span class="p">):</span> <span class="c">#@UndefinedVariable</span>
+                    <span class="n">__main__</span><span class="o">.</span><span class="n">_display</span><span class="o">.</span><span class="n">drawExpandedCells</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_visitedlist</span><span class="p">)</span> <span class="c">#@UndefinedVariable</span>
+
+        <span class="k">return</span> <span class="n">isGoal</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <p>Returns successor states, the actions they require, and a cost of 1.</p>
+<p>As noted in search.py:
+     For a given state, this should return a list of triples,
+ (successor, action, stepCost), where 'successor' is a
+ successor to the current state, 'action' is the action
+ required to get there, and 'stepCost' is the incremental
+ cost of expanding to that successor</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getSuccessors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">successors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Directions</span><span class="o">.</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">SOUTH</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">EAST</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">WEST</span><span class="p">]:</span>
+            <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">state</span>
+            <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">Actions</span><span class="o">.</span><span class="n">directionToVector</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">nextx</span><span class="p">,</span> <span class="n">nexty</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">[</span><span class="n">nextx</span><span class="p">][</span><span class="n">nexty</span><span class="p">]:</span>
+                <span class="n">nextState</span> <span class="o">=</span> <span class="p">(</span><span class="n">nextx</span><span class="p">,</span> <span class="n">nexty</span><span class="p">)</span>
+                <span class="n">cost</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">costFn</span><span class="p">(</span><span class="n">nextState</span><span class="p">)</span>
+                <span class="n">successors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span> <span class="n">nextState</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">cost</span><span class="p">)</span> <span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      <p>Bookkeeping for display purposes</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">state</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visited</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visited</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">_visitedlist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">successors</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>Returns the cost of a particular sequence of actions.  If those actions
+include an illegal move, return 999999</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getCostOfActions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">actions</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="mi">999999</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStartState</span><span class="p">()</span>
+        <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>Check figure out the next state and see whether its' legal</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">Actions</span><span class="o">.</span><span class="n">directionToVector</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]:</span> <span class="k">return</span> <span class="mi">999999</span>
+            <span class="n">cost</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">costFn</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">cost</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      <p>An agent for position search with a cost function that penalizes being in
+positions on the West side of the board.</p>
+<p>The cost function for stepping into a position (x,y) is 1/2^x.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">StayEastSearchAgent</span><span class="p">(</span><span class="n">SearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">uniformCostSearch</span>
+        <span class="n">costFn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">pos</span><span class="p">:</span> <span class="o">.</span><span class="mi">5</span> <span class="o">**</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchType</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="n">PositionSearchProblem</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">costFn</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      <p>An agent for position search with a cost function that penalizes being in
+positions on the East side of the board.</p>
+<p>The cost function for stepping into a position (x,y) is 2^x.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">StayWestSearchAgent</span><span class="p">(</span><span class="n">SearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">=</span> <span class="n">search</span><span class="o">.</span><span class="n">uniformCostSearch</span>
+        <span class="n">costFn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">pos</span><span class="p">:</span> <span class="mi">2</span> <span class="o">**</span> <span class="n">pos</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchType</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">state</span><span class="p">:</span> <span class="n">PositionSearchProblem</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">costFn</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      <p>The Manhattan distance heuristic for a PositionSearchProblem</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">manhattanHeuristic</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">{}):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">xy1</span> <span class="o">=</span> <span class="n">position</span>
+    <span class="n">xy2</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">goal</span>
+    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      <p>The Euclidean distance heuristic for a PositionSearchProblem</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">euclideanHeuristic</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">problem</span><span class="p">,</span> <span class="n">info</span><span class="o">=</span><span class="p">{}):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      <pre><code>#####################################################
+# This portion is incomplete.  Time to write code!  #
+#####################################################
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">xy1</span> <span class="o">=</span> <span class="n">position</span>
+    <span class="n">xy2</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">goal</span>
+    <span class="k">return</span> <span class="p">(</span> <span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="o">+</span> <span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span> <span class="o">**</span> <span class="mi">2</span> <span class="p">)</span> <span class="o">**</span> <span class="mf">0.5</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
+      <p>This search problem finds paths through all four corners of a layout.</p>
+<p>You must select a suitable state space and successor function</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">CornersProblem</span><span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">SearchProblem</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-40'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-40'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-41'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-41'>#</a>
+      </div>
+      <p>Stores the walls, pacman's starting position and corners.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startingGameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-42'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-42'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="n">startingGameState</span><span class="o">.</span><span class="n">getWalls</span><span class="p">()</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="n">startingGameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startingPosition</span> <span class="o">=</span> <span class="p">(</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="p">(</span><span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">,</span> <span class="bp">False</span><span class="p">)</span> <span class="p">)</span>
+        <span class="n">top</span><span class="p">,</span> <span class="n">right</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="o">.</span><span class="n">height</span><span class="o">-</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="o">.</span><span class="n">width</span><span class="o">-</span><span class="mi">2</span>
+        
+        <span class="bp">self</span><span class="o">.</span><span class="n">corners</span> <span class="o">=</span> <span class="p">[(</span><span class="mi">1</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="n">top</span><span class="p">),</span> <span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="p">(</span><span class="n">right</span><span class="p">,</span> <span class="n">top</span><span class="p">)]</span>
+
+        <span class="k">for</span> <span class="n">corner</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">:</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">startingGameState</span><span class="o">.</span><span class="n">hasFood</span><span class="p">(</span><span class="o">*</span><span class="n">corner</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&#39;Warning: no food in corner &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">corner</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-43'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-43'>#</a>
+      </div>
+      <p>Number of search nodes expanded</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-44'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-44'>#</a>
+      </div>
+      <p>Returns the start state (in your state space, not the full Pacman state space)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getStartState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-45'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-45'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">startingPosition</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-46'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-46'>#</a>
+      </div>
+      <p>Returns whether this search state is a goal state of the problem</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">isGoalState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-47'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">corners</span> <span class="o">=</span> <span class="n">state</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">:</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+            <span class="n">corners</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+
+        <span class="n">isGoal</span> <span class="o">=</span> <span class="ow">not</span> <span class="p">(</span> <span class="bp">False</span> <span class="ow">in</span> <span class="n">corners</span> <span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">isGoal</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      <p>Returns successor states, the actions they require, and a cost of 1.</p>
+<p>As noted in search.py:
+     For a given state, this should return a list of triples,
+ (successor, action, stepCost), where 'successor' is a
+ successor to the current state, 'action' is the action
+ required to get there, and 'stepCost' is the incremental
+ cost of expanding to that successor</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getSuccessors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">successors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">corners</span> <span class="o">=</span> <span class="n">state</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="p">:</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+            <span class="n">corners</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">corners</span><span class="o">.</span><span class="n">index</span><span class="p">((</span><span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">))]</span> <span class="o">=</span> <span class="bp">True</span>
+            <span class="n">corners</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Directions</span><span class="o">.</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">SOUTH</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">EAST</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">WEST</span><span class="p">]:</span>
+            <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">Actions</span><span class="o">.</span><span class="n">directionToVector</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">nextx</span><span class="p">,</span> <span class="n">nexty</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">[</span><span class="n">nextx</span><span class="p">][</span><span class="n">nexty</span><span class="p">]:</span>
+                <span class="n">nextState</span> <span class="o">=</span> <span class="p">(</span> <span class="n">nextx</span><span class="p">,</span> <span class="n">nexty</span><span class="p">,</span> <span class="n">corners</span> <span class="p">)</span>
+                <span class="n">successors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span> <span class="n">nextState</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">successors</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      <p>Returns the cost of a particular sequence of actions.  If those actions
+include an illegal move, return 999999.  This is implemented for you.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getCostOfActions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-51'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-51'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">actions</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span> <span class="k">return</span> <span class="mi">999999</span>
+        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="p">,</span><span class="n">n</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">startingPosition</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+            <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">Actions</span><span class="o">.</span><span class="n">directionToVector</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]:</span> <span class="k">return</span> <span class="mi">999999</span>
+        <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-52'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-52'>#</a>
+      </div>
+      <p>A heuristic for the CornersProblem that you defined.</p>
+<ul>
+<li>state: The current search state (a data structure you chose in your search problem)</li>
+<li>problem: The CornersProblem instance for this layout.</li>
+</ul>
+<p>This function should always return a number that is a lower bound
+on the shortest path from the state to a goal of the problem; i.e.
+it should be admissible (as well as consistent).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">cornersHeuristic</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">problem</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-53'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-53'>#</a>
+      </div>
+      <p>These are the corner coordinates</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">corners</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">corners</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-54'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-54'>#</a>
+      </div>
+      <p>These are the walls of the maze, as a Grid (game.py)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">walls</span> <span class="o">=</span> <span class="n">problem</span><span class="o">.</span><span class="n">walls</span>
+    <span class="n">position</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">corners_visited</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-55'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-55'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">manhattan</span><span class="p">(</span><span class="n">xy1</span><span class="p">,</span> <span class="n">xy2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">manhattans</span> <span class="o">=</span> <span class="p">[</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">p</span><span class="p">)</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">corners</span><span class="p">)</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">state</span><span class="p">[</span><span class="mi">2</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">manhattans</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans</span><span class="p">)</span>
+    <span class="k">return</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-56'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-56'>#</a>
+      </div>
+      <p>A SearchAgent for FoodSearchProblem using A* and your foodHeuristic</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">AStarCornersAgent</span><span class="p">(</span><span class="n">SearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-57'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-57'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">prob</span><span class="p">:</span> <span class="n">search</span><span class="o">.</span><span class="n">aStarSearch</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">cornersHeuristic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchType</span> <span class="o">=</span> <span class="n">CornersProblem</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-58'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-58'>#</a>
+      </div>
+      <p>A search problem associated with finding the a path that collects all of the
+food (dots) in a Pacman game.</p>
+<p>A search state in this problem is a tuple ( pacmanPosition, foodGrid ) where
+  pacmanPosition: a tuple (x,y) of integers specifying Pacman's position
+  foodGrid:       a Grid (see game.py) of either True or False, specifying remaining food</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">FoodSearchProblem</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-59'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-59'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">startingGameState</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">start</span> <span class="o">=</span> <span class="p">(</span><span class="n">startingGameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">(),</span> <span class="n">startingGameState</span><span class="o">.</span><span class="n">getFood</span><span class="p">())</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="n">startingGameState</span><span class="o">.</span><span class="n">getWalls</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startingGameState</span> <span class="o">=</span> <span class="n">startingGameState</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-60'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-60'>#</a>
+      </div>
+      <p>A dictionary for the heuristic to store information</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">heuristicInfo</span> <span class="o">=</span> <span class="p">{}</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-61'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-61'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getStartState</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">start</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-62'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-62'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">isGoalState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="k">return</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">==</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-63'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-63'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getSuccessors</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="s">&quot;Returns successor states, the actions they require, and a cost of 1.&quot;</span>
+        <span class="n">successors</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">for</span> <span class="n">direction</span> <span class="ow">in</span> <span class="p">[</span><span class="n">Directions</span><span class="o">.</span><span class="n">NORTH</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">SOUTH</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">EAST</span><span class="p">,</span> <span class="n">Directions</span><span class="o">.</span><span class="n">WEST</span><span class="p">]:</span>
+            <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">Actions</span><span class="o">.</span><span class="n">directionToVector</span><span class="p">(</span><span class="n">direction</span><span class="p">)</span>
+            <span class="n">nextx</span><span class="p">,</span> <span class="n">nexty</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">[</span><span class="n">nextx</span><span class="p">][</span><span class="n">nexty</span><span class="p">]:</span>
+                <span class="n">nextFood</span> <span class="o">=</span> <span class="n">state</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+                <span class="n">nextFood</span><span class="p">[</span><span class="n">nextx</span><span class="p">][</span><span class="n">nexty</span><span class="p">]</span> <span class="o">=</span> <span class="bp">False</span>
+                <span class="n">successors</span><span class="o">.</span><span class="n">append</span><span class="p">(</span> <span class="p">(</span> <span class="p">((</span><span class="n">nextx</span><span class="p">,</span> <span class="n">nexty</span><span class="p">),</span> <span class="n">nextFood</span><span class="p">),</span> <span class="n">direction</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="p">)</span>
+        <span class="k">return</span> <span class="n">successors</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-64'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-64'>#</a>
+      </div>
+      <p>Returns the cost of a particular sequence of actions.  If those actions
+include an illegal move, return 999999</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getCostOfActions</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">actions</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-65'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-65'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">x</span><span class="p">,</span><span class="n">y</span><span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStartState</span><span class="p">()[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">cost</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-66'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-66'>#</a>
+      </div>
+      <p>figure out the next state and see whether it's legal</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">dx</span><span class="p">,</span> <span class="n">dy</span> <span class="o">=</span> <span class="n">Actions</span><span class="o">.</span><span class="n">directionToVector</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+            <span class="n">x</span><span class="p">,</span> <span class="n">y</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">x</span> <span class="o">+</span> <span class="n">dx</span><span class="p">),</span> <span class="nb">int</span><span class="p">(</span><span class="n">y</span> <span class="o">+</span> <span class="n">dy</span><span class="p">)</span>
+            <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">walls</span><span class="p">[</span><span class="n">x</span><span class="p">][</span><span class="n">y</span><span class="p">]:</span>
+                <span class="k">return</span> <span class="mi">999999</span>
+            <span class="n">cost</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="n">cost</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-67'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-67'>#</a>
+      </div>
+      <p>A SearchAgent for FoodSearchProblem using A* and your foodHeuristic</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">AStarFoodSearchAgent</span><span class="p">(</span><span class="n">SearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-68'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-68'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchFunction</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">prob</span><span class="p">:</span> <span class="n">search</span><span class="o">.</span><span class="n">aStarSearch</span><span class="p">(</span><span class="n">prob</span><span class="p">,</span> <span class="n">foodHeuristic</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">searchType</span> <span class="o">=</span> <span class="n">FoodSearchProblem</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-69'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-69'>#</a>
+      </div>
+      <p>Your heuristic for the FoodSearchProblem goes here.</p>
+<p>This heuristic must be consistent to ensure correctness.  First, try to come up
+with an admissible heuristic; almost all admissible heuristics will be consistent
+as well.</p>
+<p>If using A<em> ever finds a solution that is worse uniform cost search finds,
+your heuristic is </em>not* consistent, and probably not admissible!  On the other hand,
+inadmissible or inconsistent heuristics may find optimal solutions, so be careful.</p>
+<p>The state is a tuple ( pacmanPosition, foodGrid ) where foodGrid is a
+Grid (see game.py) of either True or False. You can call foodGrid.asList()
+to get a list of food coordinates instead.</p>
+<p>If you want access to info like walls, capsules, etc., you can query the problem.
+For example, problem.walls gives you a Grid of where the walls are.</p>
+<p>If you want to <em>store</em> information to be reused in other calls to the heuristic,
+there is a dictionary called problem.heuristicInfo that you can use. For example,
+if you only want to count the walls once and store that value, try:
+  problem.heuristicInfo['wallCount'] = problem.walls.count()
+Subsequent calls to this heuristic can access problem.heuristicInfo['wallCount']</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">foodHeuristic</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">problem</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-70'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-70'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">position</span><span class="p">,</span> <span class="n">foodGrid</span> <span class="o">=</span> <span class="n">state</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-71'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-71'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">manhattan</span><span class="p">(</span><span class="n">xy1</span><span class="p">,</span> <span class="n">xy2</span><span class="p">):</span>
+        <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">manhattans</span> <span class="o">=</span> <span class="p">[</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">position</span><span class="p">,</span> <span class="n">food_position</span><span class="p">)</span> <span class="k">for</span> <span class="n">food_position</span> <span class="ow">in</span> <span class="n">foodGrid</span><span class="o">.</span><span class="n">asList</span><span class="p">()</span> <span class="p">]</span>
+    
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">manhattans</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="k">return</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-72'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-72'>#</a>
+      </div>
+      <p>Search for all food using a sequence of searches</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ClosestDotSearchAgent</span><span class="p">(</span><span class="n">SearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-73'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-73'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">registerInitialState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">currentState</span> <span class="o">=</span> <span class="n">state</span>
+        <span class="k">while</span><span class="p">(</span><span class="n">currentState</span><span class="o">.</span><span class="n">getFood</span><span class="p">()</span><span class="o">.</span><span class="n">count</span><span class="p">()</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-74'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-74'>#</a>
+      </div>
+      <p>The missing piece</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">nextPathSegment</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">findPathToClosestDot</span><span class="p">(</span><span class="n">currentState</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">actions</span> <span class="o">+=</span> <span class="n">nextPathSegment</span>
+            <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">nextPathSegment</span><span class="p">:</span>
+                <span class="n">legal</span> <span class="o">=</span> <span class="n">currentState</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span>
+                <span class="k">if</span> <span class="n">action</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">legal</span><span class="p">:</span>
+                    <span class="n">t</span> <span class="o">=</span> <span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">action</span><span class="p">),</span> <span class="nb">str</span><span class="p">(</span><span class="n">currentState</span><span class="p">))</span>
+                    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">,</span> <span class="s">&#39;findPathToClosestDot returned an illegal move: </span><span class="si">%s</span><span class="s">!</span><span class="se">\n</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">t</span>
+                <span class="n">currentState</span> <span class="o">=</span> <span class="n">currentState</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">actionIndex</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">print</span> <span class="s">&#39;Path found with cost </span><span class="si">%d</span><span class="s">.&#39;</span> <span class="o">%</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">actions</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-75'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-75'>#</a>
+      </div>
+      <p>Returns a path (a list of actions) to the closest dot, starting from gameState</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">findPathToClosestDot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-76'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-76'>#</a>
+      </div>
+      <p>Here are some useful elements of the startState</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">startPosition</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">()</span>
+        <span class="n">food</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getFood</span><span class="p">()</span>
+        <span class="n">walls</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getWalls</span><span class="p">()</span>
+        <span class="n">problem</span> <span class="o">=</span> <span class="n">AnyFoodSearchProblem</span><span class="p">(</span><span class="n">gameState</span><span class="p">)</span>
+
+        <span class="s">&quot;*** YOUR CODE HERE ***&quot;</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">raiseNotDefined</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-77'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-77'>#</a>
+      </div>
+      <p>A search problem for finding a path to any food.</p>
+<p>This search problem is just like the PositionSearchProblem, but
+has a different goal test, which you need to fill in below.  The
+state space and successor function do not need to be changed.</p>
+<p>The class definition above, AnyFoodSearchProblem(PositionSearchProblem),
+inherits the methods of the PositionSearchProblem.</p>
+<p>You can use this search problem to help you fill in
+the findPathToClosestDot method.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">AnyFoodSearchProblem</span><span class="p">(</span><span class="n">PositionSearchProblem</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-78'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-78'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-79'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-79'>#</a>
+      </div>
+      <p>Stores information from the gameState.  You don't need to change this.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-80'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-80'>#</a>
+      </div>
+      <p>Store the food for later reference</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">food</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getFood</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-81'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-81'>#</a>
+      </div>
+      <p>Store info for the PositionSearchProblem (no need to change this)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">walls</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getWalls</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">startState</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">costFn</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="mi">1</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">_visited</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_visitedlist</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_expanded</span> <span class="o">=</span> <span class="p">{},</span> <span class="p">[],</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-82'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-82'>#</a>
+      </div>
+      <p>The state is Pacman's position. Fill this in with a goal test
+that will complete the problem definition.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">isGoalState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-83'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-83'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">x</span><span class="p">,</span><span class="n">y</span> <span class="o">=</span> <span class="n">state</span>
+
+        <span class="s">&quot;*** YOUR CODE HERE ***&quot;</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">raiseNotDefined</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-84'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-84'>#</a>
+      </div>
+      <h6></h6>
+<p>Mini-contest 1 #</p>
+<h6></h6>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-85'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-85'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ApproximateSearchAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span>
+    <span class="s">&quot;Implement your contest entry here.  Change anything but the class name.&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-86'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-86'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">registerInitialState</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span>
+        <span class="s">&quot;This method is called before any moves are made.&quot;</span>
+        <span class="s">&quot;*** YOUR CODE HERE ***&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-87'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-87'>#</a>
+      </div>
+      <p>From game.py:
+The Agent will receive a GameState and must return an action from
+Directions.{North, South, East, West, Stop}</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-88'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-88'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="s">&quot;*** YOUR CODE HERE ***&quot;</span>
+        <span class="n">util</span><span class="o">.</span><span class="n">raiseNotDefined</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-89'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-89'>#</a>
+      </div>
+      <p>Returns the maze distance between any two points, using the search functions
+you have already built.  The gameState can be any game state -- Pacman's position
+in that state is ignored.</p>
+<p>Example usage: mazeDistance( (2,4), (5,6), gameState)</p>
+<p>This might be a useful helper function for your ApproximateSearchAgent.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">mazeDistance</span><span class="p">(</span><span class="n">point1</span><span class="p">,</span> <span class="n">point2</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-90'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-90'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">x1</span><span class="p">,</span> <span class="n">y1</span> <span class="o">=</span> <span class="n">point1</span>
+    <span class="n">x2</span><span class="p">,</span> <span class="n">y2</span> <span class="o">=</span> <span class="n">point2</span>
+    <span class="n">walls</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getWalls</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">walls</span><span class="p">[</span><span class="n">x1</span><span class="p">][</span><span class="n">y1</span><span class="p">],</span> <span class="s">&#39;point1 is a wall: &#39;</span> <span class="o">+</span> <span class="n">point1</span>
+    <span class="k">assert</span> <span class="ow">not</span> <span class="n">walls</span><span class="p">[</span><span class="n">x2</span><span class="p">][</span><span class="n">y2</span><span class="p">],</span> <span class="s">&#39;point2 is a wall: &#39;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">point2</span><span class="p">)</span>
+    <span class="n">prob</span> <span class="o">=</span> <span class="n">PositionSearchProblem</span><span class="p">(</span><span class="n">gameState</span><span class="p">,</span> <span class="n">start</span><span class="o">=</span><span class="n">point1</span><span class="p">,</span> <span class="n">goal</span><span class="o">=</span><span class="n">point2</span><span class="p">,</span> <span class="n">warn</span><span class="o">=</span><span class="bp">False</span><span class="p">,</span> <span class="n">visualize</span><span class="o">=</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">search</span><span class="o">.</span><span class="n">bfs</span><span class="p">(</span><span class="n">prob</span><span class="p">))</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

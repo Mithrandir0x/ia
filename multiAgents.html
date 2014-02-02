@@ -1,0 +1,1063 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>multiAgents.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id="background"></div>
+<div id='container'>
+  <div class='section'>
+    <div class='docs'><h1>multiAgents.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">util</span> <span class="kn">import</span> <span class="n">manhattanDistance</span>
+<span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="n">Directions</span>
+<span class="kn">import</span> <span class="nn">random</span><span class="o">,</span> <span class="nn">util</span>
+
+<span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="n">Agent</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>A reflex agent chooses an action at each choice point by examining
+  its alternatives via a state evaluation function.</p>
+<p>The code below is provided as a guide.  You are welcome to change
+  it in any way you see fit, so long as you don't touch our method
+  headers.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ReflexAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>You do not need to change this method, but you're welcome to.</p>
+<p>getAction chooses among the best options according to the evaluation function.</p>
+<p>Just like in the previous project, getAction takes a GameState and returns
+some Directions.X for some X in the set {North, South, West, East, Stop}</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Collect legal moves and successor states</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">legalMoves</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Choose one of the best actions</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">scores</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">evaluationFunction</span><span class="p">(</span><span class="n">gameState</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">legalMoves</span><span class="p">]</span>
+    <span class="n">bestScore</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">scores</span><span class="p">)</span>
+    <span class="n">bestIndices</span> <span class="o">=</span> <span class="p">[</span><span class="n">index</span> <span class="k">for</span> <span class="n">index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">scores</span><span class="p">))</span> <span class="k">if</span> <span class="n">scores</span><span class="p">[</span><span class="n">index</span><span class="p">]</span> <span class="o">==</span> <span class="n">bestScore</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Pick randomly among the best</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">chosenIndex</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">bestIndices</span><span class="p">)</span>
+    
+    <span class="s">&quot;Add more of your code here if you want to&quot;</span>
+    
+    <span class="k">return</span> <span class="n">legalMoves</span><span class="p">[</span><span class="n">chosenIndex</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Design a better evaluation function here. </p>
+<p>The evaluation function takes in the current and proposed successor
+GameStates (pacman.py) and returns a number, where higher numbers are better.</p>
+<p>The code below extracts some useful information from the state, like the 
+remaining food (oldFood) and Pacman position after moving (newPos).
+newScaredTimes holds the number of moves that each ghost will remain
+scared because of Pacman having eaten a power pellet.</p>
+<p>Print out these variables to see what you're getting, then combine them
+to create a masterful evaluation function.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">evaluationFunction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">currentGameState</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="n">successorGameState</span><span class="o">.</span><span class="n">isWin</span><span class="p">():</span>  <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&quot;inf&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">successorGameState</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&quot;-inf&quot;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Useful information you can extract from a GameState (pacman.py)</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">successorGameState</span> <span class="o">=</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">generatePacmanSuccessor</span><span class="p">(</span><span class="n">action</span><span class="p">)</span>
+    <span class="n">newPos</span> <span class="o">=</span> <span class="n">successorGameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">()</span>
+    <span class="n">oldFood</span> <span class="o">=</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">getFood</span><span class="p">()</span>
+    <span class="n">newGhostStates</span> <span class="o">=</span> <span class="n">successorGameState</span><span class="o">.</span><span class="n">getGhostStates</span><span class="p">()</span> 
+    <span class="n">newScaredTimes</span> <span class="o">=</span> <span class="p">[</span><span class="n">ghostState</span><span class="o">.</span><span class="n">scaredTimer</span> <span class="k">for</span> <span class="n">ghostState</span> <span class="ow">in</span> <span class="n">newGhostStates</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">manhattan</span><span class="p">(</span><span class="n">xy1</span><span class="p">,</span> <span class="n">xy2</span><span class="p">):</span>
+      <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="n">score</span> <span class="o">=</span> <span class="n">successorGameState</span><span class="o">.</span><span class="n">getScore</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>Minimum distance where the ghosts begin to be important for Pacman.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">warning_ghost_near</span> <span class="o">=</span> <span class="mi">3</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>Only consider the non scared ghosts. Our priority is survive, not win a lot of points, so
+Pacman will ignore the scared ghosts, who when are eated increase increases a lot the game score.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">manhattans_ghost</span> <span class="o">=</span> <span class="p">[</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">newPos</span><span class="p">,</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">getPosition</span><span class="p">())</span> <span class="k">for</span> <span class="n">ghostState</span> <span class="ow">in</span> <span class="n">newGhostStates</span> <span class="k">if</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">scaredTimer</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>If there ara some ghost alive, take the distance between the nearby one and Pacman, and if it's 
+lower than the warning distance declared before, Pacman will run away. </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">min_manhattans_ghost</span> <span class="o">=</span> <span class="n">warning_ghost_near</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">manhattans_ghost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">):</span> 
+      <span class="n">min_manhattans_ghost</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans_ghost</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="p">(</span> <span class="n">min_manhattans_ghost</span> <span class="o">&lt;</span> <span class="n">warning_ghost_near</span> <span class="p">):</span>
+      <span class="k">return</span> <span class="o">-</span> <span class="p">(</span><span class="nb">float</span><span class="p">(</span><span class="s">&#39;inf&#39;</span><span class="p">))</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>In this point, there are some ghost in the map (all of them out of our warning range), but Pacman
+is not worried at all, so he'll go to eat some balls (maybe there aren't...). How to get the better one? Well, first of all,
+we need to know the most nearby food, that should be our objetive. </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">manhattans_food</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">newPos</span><span class="p">,</span> <span class="n">food</span><span class="p">)</span> <span class="p">)</span> <span class="k">for</span> <span class="n">food</span> <span class="ow">in</span> <span class="n">oldFood</span><span class="o">.</span><span class="n">asList</span><span class="p">()</span> <span class="p">]</span>
+    <span class="n">min_manhattans_food</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans_food</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>If there is some ball, the evaluation function will return the inverse of the Manhattan distance
+between Pacman and that ball, and increasing to that result the actual score. If there's no ball, will 
+only return the score, being an obviously worse option.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">inv_min_manhattans_food</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+    <span class="k">if</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">manhattans_food</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="n">min_manhattans_food</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">):</span> 
+      <span class="n">inv_min_manhattans_food</span> <span class="o">=</span> <span class="p">(</span><span class="mi">1</span> <span class="o">/</span> <span class="n">min_manhattans_food</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">inv_min_manhattans_food</span> <span class="o">+</span> <span class="n">score</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>This default evaluation function just returns the score of the state.
+  The score is the same one displayed in the Pacman GUI.</p>
+<p>This evaluation function is meant for use with adversarial search agents
+  (not reflex agents).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">scoreEvaluationFunction</span><span class="p">(</span><span class="n">currentGameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">return</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">getScore</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      <p>This class provides some common elements to all of your
+  multi-agent searchers.  Any methods defined here will be available
+  to the MinimaxPacmanAgent, AlphaBetaPacmanAgent &amp; ExpectimaxPacmanAgent.</p>
+<p>You <em>do not</em> need to make any changes here, but you can if you want to
+  add functionality to all your adversarial search agents.  Please do not
+  remove anything, however.</p>
+<p>Note: this is an abstract class: one that should not be instantiated.  It's
+  only partially specified, and designed to be extended.  Agent (game.py)
+  is another abstract class.  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">MultiAgentSearchAgent</span><span class="p">(</span><span class="n">Agent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">evalFn</span> <span class="o">=</span> <span class="s">&#39;scoreEvaluationFunction&#39;</span><span class="p">,</span> <span class="n">depth</span> <span class="o">=</span> <span class="s">&#39;2&#39;</span><span class="p">):</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="mi">0</span> <span class="c"># Pacman is always agent index 0</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">evaluationFunction</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">evalFn</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">depth</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">depth</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>The Minimax Agent</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">MinimaxAgent</span><span class="p">(</span><span class="n">MultiAgentSearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span>
+    <span class="n">evaluate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluationFunction</span>
+    
+    <span class="n">maxDepth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span>
+    <span class="n">maxGhosts</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getNumAgents</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      <p>The Pacman maximizing utility function. </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">maxValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">maxDepth</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isWin</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      <p>Terminal condition to leave</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">utility</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utility</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>The worst thing a Pacman can do is to be idle without doing anything.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="n">u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;-inf&#39;</span><span class="p">)</span>
+      
+      <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <p>We filter the stop action as it is already defined as the possible initial state</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span> <span class="n">action</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span> <span class="p">]</span>
+      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>For each of the action the Pacman can perform, generate a new state
+with such action executed, and imagine how the ghosts would behave
+and minimize pacman's utility value</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">utility</span> <span class="o">=</span> <span class="n">minValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">utility</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">u</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-30'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-30'>#</a>
+      </div>
+      <p>The Ghosts minimizing utility function</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">minValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">ghost_id</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-31'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-31'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">maxDepth</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isWin</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-32'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-32'>#</a>
+      </div>
+      <p>Terminal condition to leave</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">utility</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">))</span>
+        <span class="k">return</span> <span class="n">utility</span>
+      
+      <span class="k">if</span> <span class="n">ghost_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ghost_id</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="n">next_ghost_id</span> <span class="o">=</span> <span class="n">ghost_id</span> <span class="o">+</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-33'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-33'>#</a>
+      </div>
+      <p>So why initialize the ghost minimizing utility to these
+values? The best thing a ghost can do to maximize the
+pacman's utility would be to be frozen, and quiet.
+Though that won't happen ever...</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="n">u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;inf&#39;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-34'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-34'>#</a>
+      </div>
+      <p>For each ghost, iterate over each of its actions
+to calculate the utility of the new generated state</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-35'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-35'>#</a>
+      </div>
+      <p>Always find the minimal utility value of the Pacman.
+We don't want that pesky guy to win over our ghosts.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="n">ghost_id</span> <span class="o">==</span> <span class="n">maxGhosts</span><span class="p">:</span>
+          <span class="n">utility</span> <span class="o">=</span> <span class="n">maxValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">utility</span> <span class="o">=</span> <span class="n">minValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">depth</span><span class="p">,</span> <span class="n">next_ghost_id</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">utility</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">u</span>
+
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span> <span class="n">action</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span> <span class="p">]</span>
+    <span class="n">actions_utilities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+      <span class="n">actions_utilities</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">minValue</span><span class="p">(</span><span class="n">gameState</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">action</span><span class="p">))</span>
+    
+    <span class="n">best_action</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">actions_utilities</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">best_action</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-36'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-36'>#</a>
+      </div>
+      <p>The Alpha-Beta Pruning Minimax Agent.
+  You're gonna get so pruned...</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">AlphaBetaAgent</span><span class="p">(</span><span class="n">MultiAgentSearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-37'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-37'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-38'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-38'>#</a>
+      </div>
+      <p>Returns the minimax action using self.depth and self.evaluationFunction</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-39'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-39'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">evaluate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluationFunction</span>
+    <span class="n">maxDepth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span>
+    <span class="n">maxGhosts</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getNumAgents</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-40'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-40'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">maxValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">maxDepth</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isWin</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span>
+        <span class="n">utility</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utility</span>
+      
+      <span class="n">u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;-inf&#39;</span><span class="p">)</span>
+      
+      <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span> <span class="n">action</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span> <span class="p">]</span>
+      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+        <span class="n">utility</span> <span class="o">=</span> <span class="n">minValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">utility</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">u</span> <span class="o">&gt;=</span> <span class="n">beta</span><span class="p">:</span> 
+          <span class="k">return</span> <span class="n">u</span>
+        <span class="n">alpha</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">alpha</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+      
+      <span class="k">return</span> <span class="n">u</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-41'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-41'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">minValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">ghost_id</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span>
+      <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">maxDepth</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isWin</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span>
+        <span class="n">utility</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utility</span>
+      
+      <span class="k">if</span> <span class="n">ghost_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ghost_id</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="n">next_ghost_id</span> <span class="o">=</span> <span class="n">ghost_id</span> <span class="o">+</span> <span class="mi">1</span>
+      
+      <span class="n">u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;inf&#39;</span><span class="p">)</span>
+      
+      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ghost_id</span> <span class="o">==</span> <span class="n">maxGhosts</span><span class="p">:</span>
+          <span class="n">utility</span> <span class="o">=</span> <span class="n">maxValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">utility</span> <span class="o">=</span> <span class="n">minValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">next_ghost_id</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">utility</span><span class="p">)</span>
+        
+        <span class="k">if</span> <span class="n">u</span> <span class="o">&lt;=</span> <span class="n">alpha</span><span class="p">:</span>
+          <span class="k">return</span> <span class="n">u</span>
+        <span class="n">beta</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">beta</span><span class="p">,</span> <span class="n">u</span><span class="p">)</span>
+
+      <span class="k">return</span> <span class="n">u</span>
+
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span> <span class="n">action</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span> <span class="p">]</span>
+    <span class="n">actions_utilities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">alpha</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;-inf&#39;</span><span class="p">)</span>
+    <span class="n">beta</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;inf&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+      <span class="n">actions_utilities</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">minValue</span><span class="p">(</span><span class="n">gameState</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span> <span class="n">action</span><span class="p">))</span>
+    
+    <span class="n">best_action</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">actions_utilities</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">best_action</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-42'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-42'>#</a>
+      </div>
+      <p>The Expectimax Agent</p>
+<p>This agent is based upon Minimax agent. The idea is that ghosts
+act as probability nodes in the game tree, and their actions are
+considered to have a probability. For now, each action has the
+same probability.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ExpectimaxAgent</span><span class="p">(</span><span class="n">MultiAgentSearchAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-43'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-43'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-44'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-44'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">gameState</span><span class="p">):</span>
+    <span class="n">evaluate</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">evaluationFunction</span>
+    
+    <span class="n">maxDepth</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">depth</span>
+    <span class="n">maxGhosts</span> <span class="o">=</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getNumAgents</span><span class="p">()</span> <span class="o">-</span> <span class="mi">1</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-45'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-45'>#</a>
+      </div>
+      <p>Given a state and a list of legal_actions of a ghost,
+calculate its probabilities.</p>
+<p>Though state is not used in the current implementation,
+having information of the state when calculating the
+probabilities of an action would be useful to know what
+would do a ghost.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">get_probabilities</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">legal_actions</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-46'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-46'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="n">p</span> <span class="o">=</span> <span class="p">{}</span>
+      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">legal_actions</span><span class="p">:</span>
+        <span class="n">p</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">legal_actions</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">p</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-47'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-47'>#</a>
+      </div>
+      <p>The Pacman maximizing function. Remains the same as Minimax,
+except for calling expValue, instead of minValue.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">maxValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">depth</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-48'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-48'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">maxDepth</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isWin</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span>
+        <span class="n">utility</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utility</span>
+      
+      <span class="n">u</span> <span class="o">=</span> <span class="nb">float</span><span class="p">(</span><span class="s">&#39;-inf&#39;</span><span class="p">)</span>
+      
+      <span class="n">depth</span> <span class="o">+=</span> <span class="mi">1</span>
+      <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span> <span class="n">action</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span> <span class="p">]</span>
+      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+        <span class="n">utility</span> <span class="o">=</span> <span class="n">expValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="n">u</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">u</span><span class="p">,</span> <span class="n">utility</span><span class="p">)</span>
+      <span class="k">return</span> <span class="n">u</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-49'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-49'>#</a>
+      </div>
+      <p>The Ghost expectation function. Instead of treating the ghost as
+an oponent, it is treated as an external factor, which influences
+the utility function, instead of being an agent which tries to
+minimize the Pacman's utility.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">expValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">depth</span><span class="p">,</span> <span class="n">ghost_id</span> <span class="o">=</span> <span class="bp">None</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-50'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-50'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>      <span class="k">if</span> <span class="n">depth</span> <span class="o">&gt;=</span> <span class="n">maxDepth</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isWin</span><span class="p">()</span> <span class="ow">or</span> <span class="n">state</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span>
+        <span class="n">utility</span> <span class="o">=</span> <span class="n">evaluate</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">utility</span>
+      
+      <span class="k">if</span> <span class="n">ghost_id</span> <span class="o">==</span> <span class="bp">None</span><span class="p">:</span>
+        <span class="n">ghost_id</span> <span class="o">=</span> <span class="mi">1</span>
+      <span class="n">next_ghost_id</span> <span class="o">=</span> <span class="n">ghost_id</span> <span class="o">+</span> <span class="mi">1</span>
+
+      <span class="n">actions</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">)</span>
+      <span class="n">expectation</span> <span class="o">=</span> <span class="mi">0</span>
+      <span class="n">action_probabilities</span> <span class="o">=</span> <span class="n">get_probabilities</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">actions</span><span class="p">)</span>
+
+      <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">ghost_id</span> <span class="o">==</span> <span class="n">maxGhosts</span><span class="p">:</span>
+          <span class="n">utility</span> <span class="o">=</span> <span class="n">maxValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">depth</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">utility</span> <span class="o">=</span> <span class="n">expValue</span><span class="p">(</span><span class="n">state</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="n">ghost_id</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">depth</span><span class="p">,</span> <span class="n">next_ghost_id</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-51'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-51'>#</a>
+      </div>
+      <p>This is the only line that differs from the minValue used in Minimax. 
+As an exp node in a game tree being explored by the Pacman, it has to
+calculate the expectation using the probabilities previously calculated.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">expectation</span> <span class="o">+=</span> <span class="n">action_probabilities</span><span class="p">[</span><span class="n">action</span><span class="p">]</span> <span class="o">*</span> <span class="n">utility</span>
+
+      <span class="k">return</span> <span class="n">expectation</span>
+    
+    <span class="n">actions</span> <span class="o">=</span> <span class="p">[</span> <span class="n">action</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">gameState</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">()</span> <span class="k">if</span> <span class="n">action</span> <span class="o">!=</span> <span class="n">Directions</span><span class="o">.</span><span class="n">STOP</span> <span class="p">]</span>
+    <span class="n">actions_utilities</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span>
+      <span class="n">actions_utilities</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">expValue</span><span class="p">(</span><span class="n">gameState</span><span class="o">.</span><span class="n">generateSuccessor</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="mi">1</span><span class="p">),</span> <span class="n">action</span><span class="p">))</span>
+      
+    <span class="n">best_action</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">actions_utilities</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">best_action</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-52'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-52'>#</a>
+      </div>
+      <p>Your extreme ghost-hunting, pellet-nabbing, food-gobbling, unstoppable
+  evaluation function.</p>
+<p>DESCRIPTION: YARRRRR-READ AHOY</p>
+<p>DISCLAIMER:
+  I lost the original source of this code, so this part is not mine at all. Though anyone
+  reading this will frown at me, I have to tell you: Hey, I had an assingment to deliver.</p>
+<p>If by any chance, you're the one that did this part of the code, I owe you a beer.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">def</span> <span class="nf">betterEvaluationFunction</span><span class="p">(</span><span class="n">currentGameState</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-53'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-53'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">if</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">isWin</span><span class="p">():</span>  <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&quot;inf&quot;</span><span class="p">)</span>
+  <span class="k">if</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">isLose</span><span class="p">():</span> <span class="k">return</span> <span class="nb">float</span><span class="p">(</span><span class="s">&quot;-inf&quot;</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-54'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-54'>#</a>
+      </div>
+      <p>Fetch several data we require to analyze thecurrent state of the pacman's environment</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">pacmanPos</span> <span class="o">=</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">getPacmanPosition</span><span class="p">()</span>
+  <span class="n">ghostStates</span> <span class="o">=</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">getGhostStates</span><span class="p">()</span> 
+  <span class="n">foodPos</span> <span class="o">=</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">getFood</span><span class="p">()</span>
+  <span class="n">capsules</span> <span class="o">=</span> <span class="n">currentGameState</span><span class="o">.</span><span class="n">getCapsules</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-55'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-55'>#</a>
+      </div>
+      <p>Our lil' and old Manhattan taxi drive distance function</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">manhattan</span><span class="p">(</span><span class="n">xy1</span><span class="p">,</span> <span class="n">xy2</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-56'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-56'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span> <span class="o">+</span> <span class="nb">abs</span><span class="p">(</span><span class="n">xy1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">xy2</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+  <span class="n">manhattans_food</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">pacmanPos</span><span class="p">,</span> <span class="n">food</span><span class="p">)</span> <span class="p">)</span> <span class="k">for</span> <span class="n">food</span> <span class="ow">in</span> <span class="n">foodPos</span><span class="o">.</span><span class="n">asList</span><span class="p">()</span> <span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-57'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-57'>#</a>
+      </div>
+      <p>For each of the manhattan distances to a food, we take the one
+with the minimal distance possible</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">min_manhattans_food</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans_food</span><span class="p">)</span>
+
+  <span class="n">manhattans_ghost</span> <span class="o">=</span> <span class="p">[</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">pacmanPos</span><span class="p">,</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">getPosition</span><span class="p">())</span> <span class="k">for</span> <span class="n">ghostState</span> <span class="ow">in</span> <span class="n">ghostStates</span> <span class="k">if</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">scaredTimer</span> <span class="o">==</span> <span class="mi">0</span> <span class="p">]</span>
+  <span class="n">min_manhattans_ghost</span> <span class="o">=</span> <span class="o">-</span><span class="mi">3</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-58'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-58'>#</a>
+      </div>
+      <p>For each manhattan distance of a ghost, let's find the smalles distance possible.
+Why an initial negative value? If no ghost exists in this state, simply give a
+little price to Pacman for putting ghosts to rest.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">manhattans_ghost</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">):</span> 
+    <span class="n">min_manhattans_ghost</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans_ghost</span><span class="p">)</span>
+
+  <span class="n">manhattans_ghost_scared</span> <span class="o">=</span> <span class="p">[</span> <span class="n">manhattan</span><span class="p">(</span><span class="n">pacmanPos</span><span class="p">,</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">getPosition</span><span class="p">())</span> <span class="k">for</span> <span class="n">ghostState</span> <span class="ow">in</span> <span class="n">ghostStates</span> <span class="k">if</span> <span class="n">ghostState</span><span class="o">.</span><span class="n">scaredTimer</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">]</span>
+  <span class="n">min_manhattans_ghost_scared</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-59'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-59'>#</a>
+      </div>
+      <p>The same goes with the scared ghosts. Find the smallest distance possible for each possible scared ghost.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">if</span> <span class="p">(</span> <span class="nb">len</span><span class="p">(</span><span class="n">manhattans_ghost_scared</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="p">):</span> 
+    <span class="n">min_manhattans_ghost_scared</span> <span class="o">=</span> <span class="nb">min</span><span class="p">(</span><span class="n">manhattans_ghost_scared</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-60'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-60'>#</a>
+      </div>
+      <p>Get the default score for the current state.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">score</span> <span class="o">=</span> <span class="n">scoreEvaluationFunction</span><span class="p">(</span><span class="n">currentGameState</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-61'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-61'>#</a>
+      </div>
+      <p>The main objective of the pacman: THE PELLET. It has to be its utmost priority.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">score</span> <span class="o">+=</span> <span class="o">-</span><span class="mf">1.5</span> <span class="o">*</span> <span class="n">min_manhattans_food</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-62'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-62'>#</a>
+      </div>
+      <p>Why the inverse of the lowest distance possible? Pretty obvious, we want to
+give the less points possible when a ghost is getting near the Pacman.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">score</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="p">(</span> <span class="mf">1.0</span> <span class="o">/</span> <span class="n">min_manhattans_ghost</span> <span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-63'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-63'>#</a>
+      </div>
+      <p>So for scared ghosts, we give them the same weight as the normal ghosts,
+though when we can eat them, they will be a pretty and tasty meal.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">score</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">2</span> <span class="o">*</span> <span class="n">min_manhattans_ghost_scared</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-64'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-64'>#</a>
+      </div>
+      <p>Why this massive weight compared to other factors? We want the Pacman to be
+focused on eating pellets, not capsules and then go for ghosts.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">score</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">20</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">capsules</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-65'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-65'>#</a>
+      </div>
+      <p>For each non eaten pellet, diminish current state score. It is important to
+make the Pacman be enticed to go for pellets.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="n">score</span> <span class="o">+=</span> <span class="o">-</span><span class="mi">4</span> <span class="o">*</span> <span class="nb">len</span><span class="p">(</span><span class="n">foodPos</span><span class="o">.</span><span class="n">asList</span><span class="p">())</span>
+
+  <span class="k">return</span> <span class="n">score</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-66'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-66'>#</a>
+      </div>
+      <p>Abbreviation</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="n">better</span> <span class="o">=</span> <span class="n">betterEvaluationFunction</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

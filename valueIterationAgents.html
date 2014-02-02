@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>valueIterationAgents.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id="background"></div>
+<div id='container'>
+  <div class='section'>
+    <div class='docs'><h1>valueIterationAgents.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">import</span> <span class="nn">mdp</span><span class="o">,</span> <span class="nn">util</span>
+
+<span class="kn">from</span> <span class="nn">learningAgents</span> <span class="kn">import</span> <span class="n">ValueEstimationAgent</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>A ValueIterationAgent takes a Markov decision process
+(see mdp.py) on initialization and runs value iteration
+for a given number of iterations using the supplied
+discount factor.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ValueIterationAgent</span><span class="p">(</span><span class="n">ValueEstimationAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>Your value iteration agent should take an mdp on
+construction, run the indicated number of iterations
+and then act according to the resulting policy.</p>
+<p>Some useful mdp methods you will use:</p>
+<pre><code>mdp.getStates()
+mdp.getPossibleActions(state)
+mdp.getTransitionStatesAndProbs(state, action)
+mdp.getReward(state, action, nextState)
+</code></pre>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mdp</span><span class="p">,</span> <span class="n">discount</span> <span class="o">=</span> <span class="mf">0.9</span><span class="p">,</span> <span class="n">iterations</span> <span class="o">=</span> <span class="mi">100</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="bp">self</span><span class="o">.</span><span class="n">mdp</span> <span class="o">=</span> <span class="n">mdp</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">discount</span> <span class="o">=</span> <span class="n">discount</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>A Counter is a dict with default 0</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="bp">self</span><span class="o">.</span><span class="n">values</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Counter</span><span class="p">()</span>
+    
+    <span class="bp">self</span><span class="o">.</span><span class="n">qvalues</span> <span class="o">=</span> <span class="p">{</span> <span class="n">state</span><span class="p">:</span> <span class="p">{}</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span> <span class="p">}</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">policy</span> <span class="o">=</span> <span class="p">{</span> <span class="n">state</span><span class="p">:</span> <span class="bp">None</span> <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span> <span class="p">}</span>
+
+    <span class="n">states</span> <span class="o">=</span> <span class="n">mdp</span><span class="o">.</span><span class="n">getStates</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">xrange</span><span class="p">(</span>  <span class="mi">1</span><span class="p">,</span> <span class="n">iterations</span> <span class="o">+</span> <span class="mi">1</span><span class="p">):</span>
+      <span class="k">for</span> <span class="n">state</span> <span class="ow">in</span> <span class="n">states</span><span class="p">:</span>
+        <span class="n">actions</span> <span class="o">=</span> <span class="n">mdp</span><span class="o">.</span><span class="n">getPossibleActions</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+        <span class="n">v</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Given each possible action in the current state, calculate all the
+possible values we could obtain by using Bellman's equation</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>          <span class="n">t</span> <span class="o">=</span> <span class="n">mdp</span><span class="o">.</span><span class="n">getTransitionStatesAndProbs</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+          <span class="n">k</span> <span class="o">=</span> <span class="p">[</span> <span class="n">p</span> <span class="o">*</span> <span class="p">(</span> <span class="n">mdp</span><span class="o">.</span><span class="n">getReward</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">nextState</span><span class="p">)</span> <span class="o">+</span> <span class="p">(</span> <span class="n">discount</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[(</span><span class="n">i</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span> <span class="n">nextState</span><span class="p">)]</span> <span class="p">)</span> <span class="p">)</span> <span class="k">for</span> <span class="n">nextState</span><span class="p">,</span> <span class="n">p</span> <span class="ow">in</span> <span class="n">t</span> <span class="p">]</span>
+          <span class="n">q</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">qvalues</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">]</span> <span class="o">=</span> <span class="n">q</span>
+          <span class="n">v</span><span class="o">.</span><span class="n">append</span><span class="p">([</span><span class="n">q</span><span class="p">,</span> <span class="n">action</span><span class="p">])</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">v</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+          <span class="n">q</span><span class="p">,</span> <span class="n">action</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[(</span><span class="n">i</span><span class="p">,</span> <span class="n">state</span><span class="p">)]</span> <span class="o">=</span> <span class="n">q</span>
+          <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">[</span><span class="n">state</span><span class="p">]</span> <span class="o">=</span> <span class="n">action</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      <p>Return the value of the state (computed in <code>__init__</code>).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">values</span><span class="p">[(</span><span class="bp">self</span><span class="o">.</span><span class="n">iterations</span><span class="p">,</span> <span class="n">state</span><span class="p">)]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      <p>The q-value of the state action pair
+(after the indicated number of value iteration
+passes).  Note that value iteration does not
+necessarily create this quantity and you may have
+to derive it on the fly.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getQValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">qvalues</span><span class="p">[</span><span class="n">state</span><span class="p">][</span><span class="n">action</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>The policy is the best action in the given state
+according to the values computed by value iteration.
+You may break ties any way you see fit.  Note that if
+there are no legal actions, which is the case at the
+terminal state, you should return <code>None</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getPolicy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">policy</span><span class="p">[</span><span class="n">state</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>Returns the policy at the state (no exploration).</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPolicy</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

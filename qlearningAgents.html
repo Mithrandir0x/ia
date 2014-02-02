@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>qlearningAgents.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id="background"></div>
+<div id='container'>
+  <div class='section'>
+    <div class='docs'><h1>qlearningAgents.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">game</span> <span class="kn">import</span> <span class="o">*</span>
+<span class="kn">from</span> <span class="nn">learningAgents</span> <span class="kn">import</span> <span class="n">ReinforcementAgent</span>
+<span class="kn">from</span> <span class="nn">featureExtractors</span> <span class="kn">import</span> <span class="o">*</span>
+
+<span class="kn">import</span> <span class="nn">random</span><span class="o">,</span><span class="nn">util</span><span class="o">,</span><span class="nn">math</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      <p>Q-Learning Agent</p>
+<p>Functions you should fill in:</p>
+<ul>
+<li><code>getQValue</code></li>
+<li><code>getAction</code></li>
+<li><code>getValue</code></li>
+<li><code>getPolicy</code></li>
+<li><code>update</code></li>
+</ul>
+<p>Instance variables you have access to</p>
+<ul>
+<li><code>self.epsilon</code> (exploration prob)</li>
+<li><code>self.alpha</code> (learning rate)</li>
+<li><code>self.gamma</code> (discount rate)</li>
+</ul>
+<p>Functions you should use</p>
+<ul>
+<li><code>self.getLegalActions(state)</code> Returns legal actions for a state</li>
+</ul>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">QLearningAgent</span><span class="p">(</span><span class="n">ReinforcementAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      <p>You can initialize Q-values here...</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">ReinforcementAgent</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Q</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Counter</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      <p>Modify this value to set how many actions to choose randomly before selecting greedily</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="bp">self</span><span class="o">.</span><span class="n">greedy_constraint</span> <span class="o">=</span> <span class="mi">100</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">to_greedy</span> <span class="o">=</span> <span class="mi">0</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Returns Q(state,action). Should return <code>0.0</code> if we never have seen a state or (state,action) tuple.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getQValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span> <span class="ow">not</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">:</span>
+      <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">else</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>Returns <code>max(Q(state,action))</code>.</p>
+<p>Where the max is over legal actions.  Note that if
+there are no legal actions, which is the case at the
+terminal state, you should return a value of <code>0.0</code>.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">actions</span><span class="p">:</span>
+      <span class="k">return</span> <span class="mf">0.0</span>
+    <span class="k">return</span> <span class="nb">max</span><span class="p">([</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span> <span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Compute the best actions to take in a state.  Note that if there
+are no legal actions, which is the case at the terminal state,
+you should return None.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getPolicy</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">actions</span><span class="p">:</span>
+      <span class="k">return</span> <span class="bp">None</span>
+
+    <span class="n">q_actions</span> <span class="o">=</span> <span class="p">[</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getQValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">),</span> <span class="n">action</span><span class="p">)</span> <span class="k">for</span> <span class="n">action</span> <span class="ow">in</span> <span class="n">actions</span> <span class="p">]</span>
+    <span class="n">qa</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">q_actions</span><span class="p">,</span> <span class="n">key</span> <span class="o">=</span> <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="k">return</span> <span class="n">qa</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>Compute the action to take in the current state.  With
+probability self.epsilon, we should take a random action and
+take the best policy action otherwise.  Note that if there are
+no legal actions, which is the case at the terminal state, you
+should choose None as the action.</p>
+<p><code>HINT</code>: You might want to use <code>util.flipCoin(prob)</code></p>
+<p><code>HINT</code>: To pick randomly from a list, use <code>random.choice(list)</code></p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">action</span> <span class="o">=</span> <span class="bp">None</span>
+    <span class="n">actions</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getLegalActions</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">actions</span><span class="p">:</span>
+      <span class="k">if</span> <span class="n">util</span><span class="o">.</span><span class="n">flipCoin</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">epsilon</span><span class="p">):</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">choice</span><span class="p">(</span><span class="n">actions</span><span class="p">)</span>
+      <span class="k">else</span><span class="p">:</span>
+        <span class="n">action</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getPolicy</span><span class="p">(</span><span class="n">state</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">action</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>The parent class calls this to observe a 
+state = action =&gt; nextState and reward transition.
+You should do your Q-Value update here</p>
+<p><code>NOTE</code>: You should never call this function, it will be called on your behalf</p>
+<p><code>NOTE</code>:</p>
+<blockquote>
+<p>state     = s
+nextState = s'
+action    = a
+reward    = r'</p>
+</blockquote>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">nextState</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">sample</span> <span class="o">=</span> <span class="n">reward</span>
+    <span class="n">pair</span> <span class="o">=</span> <span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+    <span class="n">sample</span> <span class="o">=</span> <span class="n">reward</span> <span class="o">+</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="n">nextState</span><span class="p">)</span> <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span> <span class="p">(</span> <span class="mi">1</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">Q</span><span class="p">[</span><span class="n">pair</span><span class="p">]</span> <span class="p">)</span> <span class="o">+</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">sample</span> <span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>Exactly the same as QLearningAgent, but with different default parameters</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">PacmanQAgent</span><span class="p">(</span><span class="n">QLearningAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>These default parameters can be changed from the pacman.py command line.
+For example, to change the exploration rate, try:</p>
+<p><code>python pacman.py -p PacmanQLearningAgent -a epsilon=0.1</code></p>
+<p><code>alpha</code>    - learning rate</p>
+<p><code>epsilon</code>  - exploration rate</p>
+<p><code>gamma</code>    - discount factor</p>
+<p><code>numTraining</code> - number of training episodes, i.e. no learning after these many episodes</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">epsilon</span><span class="o">=</span><span class="mf">0.05</span><span class="p">,</span><span class="n">gamma</span><span class="o">=</span><span class="mf">0.8</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.2</span><span class="p">,</span> <span class="n">numTraining</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">args</span><span class="p">[</span><span class="s">&#39;epsilon&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epsilon</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;gamma&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">gamma</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;alpha&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">alpha</span>
+    <span class="n">args</span><span class="p">[</span><span class="s">&#39;numTraining&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">numTraining</span>
+    <span class="n">QLearningAgent</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <p>Simply calls the getAction method of <code>QLearningAgent</code> and then
+informs parent of action for Pacman.  Do not change or remove this
+method.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">action</span> <span class="o">=</span> <span class="n">QLearningAgent</span><span class="o">.</span><span class="n">getAction</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span><span class="n">state</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">doAction</span><span class="p">(</span><span class="n">state</span><span class="p">,</span><span class="n">action</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">action</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>You should only have to overwrite <code>getQValue</code>
+and <code>update</code>.  All other <code>QLearningAgent</code> functions
+should work as is.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">ApproximateQAgent</span><span class="p">(</span><span class="n">PacmanQAgent</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">extractor</span><span class="o">=</span><span class="s">&#39;IdentityExtractor&#39;</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">):</span>
+    <span class="n">PacmanQAgent</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="o">**</span><span class="n">args</span><span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">featExtractor</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">lookup</span><span class="p">(</span><span class="n">extractor</span><span class="p">,</span> <span class="nb">globals</span><span class="p">())()</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">weights</span> <span class="o">=</span> <span class="n">util</span><span class="o">.</span><span class="n">Counter</span><span class="p">()</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <p>Should return Q(state,action) = w * featureVector
+where * is the dotProduct operator</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">getQValue</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">featExtractor</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nb">sum</span><span class="p">([</span> <span class="n">value</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">()</span> <span class="p">])</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <p>Should update your weights based on transition  </p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">update</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">,</span> <span class="n">nextState</span><span class="p">,</span> <span class="n">reward</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">features</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">featExtractor</span><span class="o">.</span><span class="n">getFeatures</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">feature</span><span class="p">,</span> <span class="n">value</span> <span class="ow">in</span> <span class="n">features</span><span class="o">.</span><span class="n">iteritems</span><span class="p">():</span>
+      <span class="n">correction</span> <span class="o">=</span> <span class="p">(</span> <span class="n">reward</span> <span class="o">+</span> <span class="p">(</span> <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">getValue</span><span class="p">(</span><span class="n">nextState</span><span class="p">)</span> <span class="p">)</span> <span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">getQValue</span><span class="p">(</span><span class="n">state</span><span class="p">,</span> <span class="n">action</span><span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">weights</span><span class="p">[</span><span class="n">feature</span><span class="p">]</span> <span class="o">+=</span> <span class="bp">self</span><span class="o">.</span><span class="n">alpha</span> <span class="o">*</span> <span class="n">correction</span> <span class="o">*</span> <span class="n">value</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-27'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-27'>#</a>
+      </div>
+      <p>Called at the end of each game.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>  <span class="k">def</span> <span class="nf">final</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-28'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-28'>#</a>
+      </div>
+      <p>call the super-class final method</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="n">PacmanQAgent</span><span class="o">.</span><span class="n">final</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">state</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-29'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-29'>#</a>
+      </div>
+      <p>did we finish training?</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">episodesSoFar</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">numTraining</span><span class="p">:</span>
+      <span class="k">pass</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>

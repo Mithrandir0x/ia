@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html;charset=utf-8">
+  <title>setimig.py</title>
+  <link rel="stylesheet" href="pycco.css">
+</head>
+<body>
+<div id="background"></div>
+<div id='container'>
+  <div class='section'>
+    <div class='docs'><h1>setimig.py</h1></div>
+  </div>
+  <div class='clearall'>
+  <div class='section' id='section-0'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-0'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="kn">from</span> <span class="nn">random</span> <span class="kn">import</span> <span class="n">randint</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-1'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-1'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre><span class="k">class</span> <span class="nc">Game</span><span class="p">():</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-2'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-2'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initializeDeck</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span> <span class="o">=</span> <span class="p">[]</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-3'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-3'>#</a>
+      </div>
+      <p>Utility method to initialize the game's deck</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">initializeDeck</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-4'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-4'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">deck</span> <span class="o">=</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">11</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-5'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-5'>#</a>
+      </div>
+      <p>Core method of the game</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-6'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-6'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">print</span> <span class="s">&quot;Set i Mig&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  1. Agafar una altra carta&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;  2. Plantar-se&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">getPlayerOption</span><span class="p">()</span>
+        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">!=</span> <span class="mi">2</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deck</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getCard</span><span class="p">()</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;[</span><span class="si">%d</span><span class="s">], </span><span class="si">%s</span><span class="s">, Punts: </span><span class="si">%f</span><span class="s">&quot;</span> <span class="o">%</span> <span class="p">(</span> <span class="n">c</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStringDeck</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span><span class="p">),</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeckScore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span><span class="p">)</span> <span class="p">)</span>
+            <span class="k">print</span> <span class="s">&quot;&quot;</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">getPlayerOption</span><span class="p">()</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;Torn d&#39;ADA...&quot;</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">initializeDeck</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">playAdaTurn</span><span class="p">()</span>
+        <span class="n">playerScore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeckScore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span><span class="p">)</span>
+        <span class="n">adaScore</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeckScore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span><span class="p">)</span>
+        <span class="n">playerDistance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDistance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span><span class="p">)</span>
+        <span class="n">adaDistance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDistance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span><span class="p">)</span>
+        <span class="k">print</span> <span class="s">&#39; TU:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStringDeck</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">playerDeck</span><span class="p">),</span> <span class="n">playerScore</span><span class="p">,</span> <span class="n">playerDistance</span>
+        <span class="k">print</span> <span class="s">&#39;ADA:&#39;</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">getStringDeck</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span><span class="p">),</span> <span class="n">adaScore</span><span class="p">,</span> <span class="n">adaDistance</span>
+        <span class="k">print</span> <span class="s">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">playerScore</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;PER PLANTAR-TE NO PENSIS QUE POTS GUANYAR A ADA...&quot;</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">playerDistance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">adaDistance</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;TOTS DOS HEU PERDUT!&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;HAS PERDUT!&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">adaDistance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+                    <span class="k">print</span> <span class="s">&quot;HAS GUANYAT!&quot;</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="k">if</span> <span class="nb">abs</span><span class="p">(</span><span class="n">playerDistance</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">adaDistance</span><span class="p">):</span>
+                        <span class="k">print</span> <span class="s">&quot;HAS PERDUT!&quot;</span>
+                    <span class="k">elif</span> <span class="nb">abs</span><span class="p">(</span><span class="n">playerDistance</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="n">adaDistance</span><span class="p">):</span>
+                        <span class="k">print</span> <span class="s">&quot;HAS GUANYAT!&quot;</span>
+                    <span class="k">else</span><span class="p">:</span>
+                        <span class="k">print</span> <span class="s">&quot;HEU EMPATAT!&quot;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-7'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-7'>#</a>
+      </div>
+      <p>ADA turn simulation. Pretty eager the girl...</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">playAdaTurn</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-8'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-8'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">while</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeckScore</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mf">7.5</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deck</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-9'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-9'>#</a>
+      </div>
+      <p>Always eagerly fetch a card</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">getCard</span><span class="p">())</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-10'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-10'>#</a>
+      </div>
+      <p>Verify how many points is ADA from getting 7.5</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>            <span class="n">distance</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDistance</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">adaDeck</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-11'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-11'>#</a>
+      </div>
+      <p>ADA knows that she has lost :(</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                <span class="k">break</span>
+            <span class="k">else</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-12'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-12'>#</a>
+      </div>
+      <p>ADA tries to find if there's a card in the deck
+that would satisfy the 7.5</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                <span class="n">distance</span> <span class="o">=</span> <span class="nb">abs</span><span class="p">(</span><span class="n">distance</span><span class="p">)</span>
+                <span class="k">if</span> <span class="n">distance</span> <span class="o">&gt;</span> <span class="mf">0.5</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-13'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-13'>#</a>
+      </div>
+      <p>In case the distance to 7.5 is greater than 0.5,
+ADA tries to find if there's a card suitable to
+her needs</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                    <span class="k">try</span><span class="p">:</span>
+                        <span class="bp">self</span><span class="o">.</span><span class="n">deck</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">distance</span><span class="p">))</span>
+                    <span class="k">except</span> <span class="ne">ValueError</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-14'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-14'>#</a>
+      </div>
+      <p>If ADA does not find any card in the deck,
+simply end the game.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                        <span class="k">break</span>
+                <span class="k">else</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-15'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-15'>#</a>
+      </div>
+      <p>Otherwise, we try to find if we have any card
+greater than 7.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                    <span class="n">cards</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">n</span><span class="p">:</span> <span class="n">n</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">deck</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">cards</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-16'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-16'>#</a>
+      </div>
+      <p>If there's no card with value greater than 7,
+end the game.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>                        <span class="k">break</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-17'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-17'>#</a>
+      </div>
+      <p>Returns the difference of a deck's score with 7.5</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getDistance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deck</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-18'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-18'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">getDeckScore</span><span class="p">(</span><span class="n">deck</span><span class="p">)</span> <span class="o">-</span> <span class="mf">7.5</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-19'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-19'>#</a>
+      </div>
+      <p>Get a random card of the deck, and remove the card from it.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getCard</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-20'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-20'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">i</span> <span class="o">=</span> <span class="n">randint</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">deck</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">deck</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">i</span><span class="p">)</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-21'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-21'>#</a>
+      </div>
+      <p>Returns the score of the deck.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getDeckScore</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deck</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-22'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-22'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="n">s</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span class="n">deck</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">card</span> <span class="o">&gt;</span> <span class="mi">7</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="mf">0.5</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">s</span> <span class="o">+=</span> <span class="n">card</span>
+        <span class="k">return</span> <span class="n">s</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-23'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-23'>#</a>
+      </div>
+      <p>Returns a string representation of a deck.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getStringDeck</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">deck</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-24'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-24'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">deck</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="k">return</span> <span class="s">&#39;()&#39;</span>
+        <span class="n">s</span> <span class="o">=</span> <span class="s">&#39;(&#39;</span>
+        <span class="k">for</span> <span class="n">card</span> <span class="ow">in</span> <span class="n">deck</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">card</span> <span class="o">&lt;=</span> <span class="mi">7</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;[</span><span class="si">%d</span><span class="s">], &#39;</span> <span class="o">%</span> <span class="n">card</span>
+            <span class="k">elif</span> <span class="n">card</span> <span class="o">==</span> <span class="mi">8</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;[S], &#39;</span>
+            <span class="k">elif</span> <span class="n">card</span> <span class="o">==</span> <span class="mi">9</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;[C], &#39;</span>
+            <span class="k">elif</span> <span class="n">card</span> <span class="o">==</span> <span class="mi">10</span><span class="p">:</span> <span class="n">s</span> <span class="o">+=</span> <span class="s">&#39;[R], &#39;</span>
+        <span class="k">return</span> <span class="n">s</span><span class="p">[:</span><span class="o">-</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s">&#39;)&#39;</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-25'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-25'>#</a>
+      </div>
+      <p>Asks the player which option to choose.</p>
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>    <span class="k">def</span> <span class="nf">getPlayerOption</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+  <div class='section' id='section-26'>
+    <div class='docs'>
+      <div class='octowrap'>
+        <a class='octothorpe' href='#section-26'>#</a>
+      </div>
+      
+    </div>
+    <div class='code'>
+      <div class="highlight"><pre>        <span class="bp">self</span><span class="o">.</span><span class="n">playerOption</span> <span class="o">=</span> <span class="nb">input</span><span class="p">(</span><span class="s">&quot;Selecciona: &quot;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">Game</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+
+</pre></div>
+    </div>
+  </div>
+  <div class='clearall'></div>
+</div>
+</body>
